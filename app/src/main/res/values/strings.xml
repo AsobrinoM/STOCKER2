@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Stocker2</string>
+    <string name="btnRegEmp">REGISTRARSE</string>
+    <string name="btnExit">Volver</string>
+    <string name="LbIntReg">Introduzca los datos de su empresa</string>
+    <string name="txtNomb">Nombre:</string>
+    <string name="txtLoc">Ciudad:</string>
+    <string name="txtCodigo">Código:</string>
+    <string name="BotStrTienda">Buscar Tienda</string>
+    <string name="botStrProd">Buscar Producto</string>
+    <string name="Lbregistro">Eres una empresa?</string>
+    <string name="btIniSesi">Iniciar Sesión</string>
+    <string name="intNombEmp">Introduce el nombre  de tu empresa y la contraseña</string>
+    <string name="txtCont">Contraseña:</string>
+
+
+</resources>
