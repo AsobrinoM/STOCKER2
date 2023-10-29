@@ -43,10 +43,10 @@
         android:text="Salir"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.327"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ETISN"
-        app:layout_constraintVertical_bias="0.833" />
+        app:layout_constraintVertical_bias="0.711" />
 
     <TextView
         android:id="@+id/txtintrNomb"
@@ -79,10 +79,21 @@
         android:id="@+id/btnIniSec"
         android:layout_width="106dp"
         android:layout_height="61dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="152dp"
         android:text="@string/btIniSesi"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.327"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ETISN" />
+
+    <Button
+        android:id="@+id/BTNABREREG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="164dp"
+        android:onClick="abrirRegistrar"
+        android:text="Registrarse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
