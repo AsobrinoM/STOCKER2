@@ -47,12 +47,7 @@ class ActividadRegistro: AppCompatActivity() {
                     resultadoOperacion("Registro guardado correctamente")
                     finish()
                 }
-
-
             }
-
-
-
     }
 
     fun volver (view: View){

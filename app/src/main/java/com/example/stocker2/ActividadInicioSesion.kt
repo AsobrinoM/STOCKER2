@@ -29,13 +29,22 @@ class ActividadInicioSesion: AppCompatActivity() {
     private fun crearObjetosDelXml(){
         binding=LayoutInicioSesionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
     }
     fun btInicioSesion(){
     myCollection.document(binding.ETISN.text.toString()).get()
         .addOnSuccessListener {
             if(it.exists()){
+                if (it.get("Contraseña:").toString()==binding.etISC.text.toString()){
+                        resultadoOperacion("Bienvenido!" )
+                    val intent= Intent(this,ActivityIngresoProductos::class.java)
+                    startActivity(intent)
 
+
+                }
+                else{
+                        resultadoOperacion("La contraseña que has introducido no es correcta, intentalo de nuevo")
+
+                }
 
 
             }

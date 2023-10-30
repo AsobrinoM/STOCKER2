@@ -12,6 +12,7 @@
     <string name="btIniSesi">Iniciar Sesión</string>
     <string name="intNombEmp">Introduce el nombre  de tu empresa y la contraseña</string>
     <string name="txtCont">Contraseña:</string>
+    <string name="registrar_producto">Registrar Producto</string>
 
 
 </resources>
