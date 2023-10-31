@@ -31,12 +31,14 @@ class ActividadInicioSesion: AppCompatActivity() {
         setContentView(binding.root)
     }
     fun btInicioSesion(){
+        val nombEmp:String?=binding.ETISN.text.toString()
     myCollection.document(binding.ETISN.text.toString()).get()
         .addOnSuccessListener {
             if(it.exists()){
                 if (it.get("Contraseña:").toString()==binding.etISC.text.toString()){
                         resultadoOperacion("Bienvenido!" )
                     val intent= Intent(this,ActivityIngresoProductos::class.java)
+                    intent.putExtra("NombreEmpresa",nombEmp)
                     startActivity(intent)
 
 
@@ -68,6 +70,7 @@ class ActividadInicioSesion: AppCompatActivity() {
     }
     fun abrirRegistrar(view: View){
         val intent= Intent(this,ActividadRegistro::class.java)
+
         startActivity(intent)
     }
 

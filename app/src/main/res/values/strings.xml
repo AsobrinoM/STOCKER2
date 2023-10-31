@@ -13,6 +13,8 @@
     <string name="intNombEmp">Introduce el nombre  de tu empresa y la contraseña</string>
     <string name="txtCont">Contraseña:</string>
     <string name="registrar_producto">Registrar Producto</string>
+    <string name="numero_de_productos">Numero de Productos</string>
+    <string name="_1">1</string>
 
 
 </resources>
