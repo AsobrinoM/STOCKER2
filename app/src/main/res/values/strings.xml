@@ -17,6 +17,15 @@
     <string name="_1">1</string>
     <string name="tvregProd">Ingrese el nombre del producto y la cantidad que va a cambiar, en positivo o negativo</string>
     <string name="cantidad">Cantidad</string>
+    <string name="strCont">Contacto</string>
+    <string name="strCompApp">Compartir App</string>
+    <string name="strllamar">Llamar</string>
+    <string name="strmail">Mail</string>
+    <string name="strubi">Ubicación</string>
+    <string name="strAcDe">Acerca de...</string>
+    <string name="strAccWeb">Acceso a web</string>
+    <string name="MiNombre">Antonio Sobrino Martín</string>
+    <string name="appname">STOCKER</string>
 
 
 </resources>

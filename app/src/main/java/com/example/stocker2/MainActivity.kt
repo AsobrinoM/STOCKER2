@@ -12,6 +12,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXML()
+        setSupportActionBar(binding.appbar.toolb)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+
     }
     private fun crearObjetosDelXML(){
         binding=ActivityMainBinding.inflate(layoutInflater)
