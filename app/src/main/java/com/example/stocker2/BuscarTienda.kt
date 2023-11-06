@@ -30,7 +30,12 @@ class BuscarTienda : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         crearObjetosDelXml()
         initRecicleView()
-        cargarDatosDesdeFirestore()
+        GlobalScope.launch {
+            delay(1000)
+            cargarDatosDesdeFirestore()
+        }
+
+
     }
 
     private fun crearObjetosDelXml() {

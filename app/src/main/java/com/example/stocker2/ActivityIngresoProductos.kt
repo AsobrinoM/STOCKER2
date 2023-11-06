@@ -45,10 +45,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
                         listarDocumento(NombreEmpresa)
                     }
                 }
-
             }
-
-
         }
         if (NombreEmpresa != null) {
             listarDocumento(NombreEmpresa)
