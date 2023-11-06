@@ -35,10 +35,14 @@ class ActividadInicioSesion: AppCompatActivity() {
     myCollection.document(binding.ETISN.text.toString()).get()
         .addOnSuccessListener {
             if(it.exists()){
-                if (it.get("Contraseña:").toString()==binding.etISC.text.toString()){
+                val pagWeb:String?=it.get("Página Web").toString()
+                val tlf:String?=it.get("Telefono").toString()
+                if (it.get("Contraseña").toString()==binding.etISC.text.toString()){
                         resultadoOperacion("Bienvenido!" )
                     val intent= Intent(this,ActivityIngresoProductos::class.java)
                     intent.putExtra("NombreEmpresa",nombEmp)
+                    intent.putExtra("PaginaWeb",pagWeb)
+                    intent.putExtra("Telefono",tlf)
                     startActivity(intent)
 
 
@@ -70,7 +74,6 @@ class ActividadInicioSesion: AppCompatActivity() {
     }
     fun abrirRegistrar(view: View){
         val intent= Intent(this,ActividadRegistro::class.java)
-
         startActivity(intent)
     }
 

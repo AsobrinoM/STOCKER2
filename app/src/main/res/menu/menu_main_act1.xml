@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
@@ -15,40 +15,19 @@
         <menu
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
-            <item
-                android:id="@+id/CompartirApp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:title="@string/strCompApp" />
+
             <item
                 android:id="@+id/Contactartlfn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:title="@string/strllamar" />
-            <item
-                android:id="@+id/ContactarMail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:title="@string/strmail" />
-            <item
-                android:id="@+id/Ubica"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:title="@string/strubi" />
         </menu>
     </item>
-    <item
-        android:id="@+id/acercaDe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@android:drawable/ic_dialog_info"
-        android:title="@string/strAcDe"
-        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/Web"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@android:drawable/ic_menu_view"
+        android:icon="@drawable/common_google_signin_btn_icon_dark"
         android:title="@string/strAccWeb"
         app:showAsAction="always|collapseActionView|withText" />
 

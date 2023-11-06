@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stocker2.databinding.LayoutRegistroBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 
 private lateinit var binding: LayoutRegistroBinding
@@ -29,24 +30,48 @@ class ActividadRegistro: AppCompatActivity() {
 
     }
 
-    fun btguardarRegistro(){
-        myCollection.document(binding.ETNomEmpr.text.toString()).get()
-            .addOnSuccessListener {
-                if (it.exists()){
-                    resultadoOperacion("Este Supermercado ya esta registado")
+    fun btguardarRegistro() {
+        val nombreEmpresa = binding.ETNomEmpr.text.toString()
+        val contrasena = binding.ETID.text.toString()
 
+        if (nombreEmpresa.isEmpty() || contrasena.isEmpty()) {
+            resultadoOperacion("El nombre de la empresa y la contraseña no pueden estar vacíos")
+            return
+        }
+
+        // Consulta para obtener el último documento (ordenado por id de forma descendente)
+        myCollection
+            .orderBy("id", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                var nuevoId = 1 // Valor predeterminado si no hay supermercados
+
+                if (!querySnapshot.isEmpty) {
+                    val ultimoSupermercado = querySnapshot.documents[0]
+                    val ultimoId = ultimoSupermercado.getLong("id")
+                    if (ultimoId != null) {
+                        nuevoId = (ultimoId + 1).toInt()
+                    }
                 }
-                else{
-                    myCollection.document(binding.ETNomEmpr.text.toString()).set(
-                        hashMapOf(
-                            "Contraseña:" to binding.ETID.text.toString(),
-                            "Ciudad:" to binding.ETCiuEmpr.text.toString())
 
+                // Datos del nuevo supermercado, incluyendo el nuevo id
+                val data = hashMapOf(
+                    "id" to nuevoId,
+                    "Contraseña" to contrasena,
+                    "Ciudad" to binding.ETCiuEmpr.text.toString(),
+                    "Telefono" to binding.ETTLF.text.toString(),
+                    "paginaweb" to binding.ETPWBEmp.text.toString()
+                )
 
-                    )
-                    resultadoOperacion("Registro guardado correctamente")
-                    finish()
-                }
+                // Guarda el nuevo supermercado en la colección existente
+                myCollection
+                    .document(nombreEmpresa)
+                    .set(data)
+                    .addOnSuccessListener {
+                        resultadoOperacion("Registro guardado correctamente")
+                        finish()
+                    }
             }
     }
 

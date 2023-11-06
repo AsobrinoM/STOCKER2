@@ -12,8 +12,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXML()
-        setSupportActionBar(binding.appbar.toolb)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
 
 
     }
@@ -31,5 +29,10 @@ class MainActivity : AppCompatActivity() {
     fun abrirInicioSec(view: View){
         val intent= Intent(this,ActividadInicioSesion::class.java)
         startActivity(intent)
+    }
+    fun abrirBuscarTienda(view: View){
+        val intent=Intent(this,BuscarTienda::class.java)
+        startActivity(intent)
+
     }
 }

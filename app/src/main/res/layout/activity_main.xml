@@ -7,22 +7,12 @@
     tools:context=".MainActivity">
 
 
-
-
-
-
-
-
-
-
-
-    <include android:id="@+id/appbar" layout="@layout/toolbar"/>
-
     <Button
         android:id="@+id/ButtonBT"
         android:layout_width="117dp"
         android:layout_height="68dp"
         android:layout_marginTop="147dp"
+        android:onClick="abrirBuscarTienda"
         android:text="@string/BotStrTienda"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

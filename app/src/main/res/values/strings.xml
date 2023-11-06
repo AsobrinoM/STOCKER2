@@ -26,6 +26,10 @@
     <string name="strAccWeb">Acceso a web</string>
     <string name="MiNombre">Antonio Sobrino Martín</string>
     <string name="appname">STOCKER</string>
+    <string name="tlf">Contacto</string>
+    <string name="Web">Página Web</string>
+    <string name="tus_productos">Tus productos:</string>
+    <string name="verMs">Ver Más</string>
 
 
 </resources>
