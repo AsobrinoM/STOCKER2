@@ -3,22 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"><![CDATA[
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 
-
-
-
-
-
-
-
-
-    ]]>
 
     <EditText
         android:id="@+id/etISC"
@@ -35,19 +29,6 @@
         app:layout_constraintTop_toBottomOf="@+id/txtintrNomb"
         app:layout_constraintVertical_bias="0.225" />
 
-    <Button
-        android:id="@+id/btnSalir"
-        android:layout_width="106dp"
-        android:layout_height="61dp"
-        android:onClick="volver"
-        android:text="Salir"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.327"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ETISN"
-        app:layout_constraintVertical_bias="0.711" />
-
     <TextView
         android:id="@+id/txtintrNomb"
         android:layout_width="175dp"
@@ -60,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101" />
+        app:layout_constraintVertical_bias="0.15" />
 
     <EditText
         android:id="@+id/ETISN"
@@ -79,7 +60,7 @@
         android:id="@+id/btnIniSec"
         android:layout_width="106dp"
         android:layout_height="61dp"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="184dp"
         android:text="@string/btIniSesi"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.327"
@@ -88,10 +69,10 @@
 
     <Button
         android:id="@+id/BTNABREREG"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="164dp"
+        android:layout_width="125dp"
+        android:layout_height="57dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="156dp"
         android:onClick="abrirRegistrar"
         android:text="Registrarse"
         app:layout_constraintBottom_toBottomOf="parent"

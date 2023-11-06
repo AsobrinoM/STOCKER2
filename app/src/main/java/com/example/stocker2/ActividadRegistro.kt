@@ -2,6 +2,7 @@ package com.example.stocker2
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stocker2.databinding.LayoutRegistroBinding
@@ -11,7 +12,7 @@ import com.google.firebase.firestore.Query
 
 private lateinit var binding: LayoutRegistroBinding
 class ActividadRegistro: AppCompatActivity() {
-
+    private lateinit var btn_atras: ImageView
     private val db= FirebaseFirestore.getInstance()
     private val myCollection=db.collection("supermercados")
 
@@ -22,6 +23,12 @@ class ActividadRegistro: AppCompatActivity() {
         binding.btnRegReg.setOnClickListener{
             btguardarRegistro()
 
+        }
+        setSupportActionBar(binding.appbar.toolb)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        btn_atras=findViewById(R.id.btn_atras)
+        btn_atras.setOnClickListener{
+            finish()
         }
     }
     private fun crearObjetosDelXml(){

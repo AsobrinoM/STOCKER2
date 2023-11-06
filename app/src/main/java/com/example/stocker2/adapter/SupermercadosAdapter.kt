@@ -1,21 +1,24 @@
 package com.example.stocker2.adapter
+
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.stocker2.R
+import com.bumptech.glide.Glide
 import com.example.stocker2.SuperMercado
 import com.example.stocker2.databinding.ItemSupermercadoBinding
 
+class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMercadoViewHolder>() {
 
-class SupermercadosAdapter: RecyclerView.Adapter<SupermercadosAdapter.SuperMercadoViewHolder>() {
     private lateinit var binding: ItemSupermercadoBinding
     private var supermercados: List<SuperMercado> = emptyList()
+    private var onItemClickListener: OnItemClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuperMercadoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemSupermercadoBinding.inflate(layoutInflater, parent, false)
         return SuperMercadoViewHolder(binding)
     }
+
     override fun onBindViewHolder(holder: SuperMercadoViewHolder, position: Int) {
         val SuperMercado = supermercados[position]
         holder.render(SuperMercado)
@@ -23,20 +26,40 @@ class SupermercadosAdapter: RecyclerView.Adapter<SupermercadosAdapter.SuperMerca
 
     override fun getItemCount(): Int {
         return supermercados.size
-
     }
-    inner class SuperMercadoViewHolder(private val binding: ItemSupermercadoBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    inner class SuperMercadoViewHolder(private val binding: ItemSupermercadoBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onItemClickListener?.onItemClick(supermercados[position])
+                }
+            }
+        }
+
         fun render(Super: SuperMercado) {
-            binding.textViewId.text = Super.id.toString()
             binding.textViewNombre.text = Super.nombre
             binding.textViewTelefono.text = Super.Telefono
             binding.textViewCiudad.text = Super.Ciudad
-            binding.textViewPaginaWeb.text = Super.paginaweb
+            Glide.with(binding.imageViewProducto.context)
+                .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5GuV8OQCtWOlFIAOGTqpeKXuGUwFYHin5yA&usqp=CAU")
+                .into(binding.imageViewProducto)
         }
     }
+
     fun setSupermercados(supermercados: List<SuperMercado>) {
         this.supermercados = supermercados
         notifyDataSetChanged()
     }
-}
 
+    interface OnItemClickListener {
+        fun onItemClick(supermercado: SuperMercado)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        onItemClickListener = listener
+    }
+}

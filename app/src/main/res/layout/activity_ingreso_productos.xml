@@ -75,7 +75,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btnGuardarProducto" />
 
     <ScrollView
-        android:id="@+id/SV2"
+        android:id="@+id/SV1"
         android:layout_width="391dp"
         android:layout_height="264dp"
         android:layout_marginStart="11dp"

@@ -22,9 +22,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private lateinit var binding: ActivityIngresoProductosBinding
-private lateinit var btn_atras:ImageView
+
 class ActivityIngresoProductos : AppCompatActivity() {
+    private lateinit var binding: ActivityIngresoProductosBinding
+    private lateinit var btn_atras:ImageView
     private val db= FirebaseFirestore.getInstance()
     private val myCollection=db.collection("Productos")
     override fun onCreate(savedInstanceState: Bundle?) {

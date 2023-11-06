@@ -6,33 +6,30 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/textViewPaginaWeb"
+        android:id="@+id/textViewContacto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="84dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.028"
-        app:layout_constraintStart_toEndOf="@+id/imageViewProducto"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNombre" />
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="28dp"
+        android:text="@string/strCont"
+        app:layout_constraintEnd_toStartOf="@+id/textViewTelefono"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageViewProducto"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="78dp"
+        android:layout_height="79dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-         />
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/textViewNombre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="188dp"
+        android:layout_height="22dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:text="TextView"
+        android:text="Nombre"
         app:layout_constraintStart_toEndOf="@+id/imageViewProducto"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,8 +38,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="32dp"
-        android:text="TextView"
+        android:layout_marginTop="12dp"
+        android:text="Ciudad"
         app:layout_constraintStart_toEndOf="@+id/imageViewProducto"
         app:layout_constraintTop_toBottomOf="@+id/textViewNombre" />
 
@@ -50,17 +47,10 @@
         android:id="@+id/textViewTelefono"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="84dp"
-        android:text="TextView"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="52dp"
+        android:text="tlf"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,17 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stocker2.adapter.SupermercadosAdapter
 import com.example.stocker2.databinding.ActivityBuscarTiendaBinding
+import com.example.stocker2.databinding.ActivityProductosMercadoBinding
 import com.example.stocker2.databinding.LayoutInicioSesionBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class BuscarTienda : AppCompatActivity() {
+class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListener {
     private lateinit var binding: ActivityBuscarTiendaBinding
     private val db = FirebaseFirestore.getInstance()
     private val myCollection = db.collection("supermercados")
-
+    private lateinit var btn_atras: ImageView
     private lateinit var adapter: SupermercadosAdapter
     val manager = LinearLayoutManager(this)
 
@@ -34,7 +36,12 @@ class BuscarTienda : AppCompatActivity() {
             delay(1000)
             cargarDatosDesdeFirestore()
         }
-
+        setSupportActionBar(binding.appbar.toolb)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        btn_atras=findViewById(R.id.btn_atras)
+        btn_atras.setOnClickListener{
+            finish()
+        }
 
     }
 
@@ -49,6 +56,7 @@ class BuscarTienda : AppCompatActivity() {
         adapter = SupermercadosAdapter()
         binding.recyclerMercados.adapter = adapter
         binding.recyclerMercados.addItemDecoration(decoration)
+        adapter.setOnItemClickListener(this)
     }
 
     private fun cargarDatosDesdeFirestore() {
@@ -68,6 +76,11 @@ class BuscarTienda : AppCompatActivity() {
             .addOnFailureListener { e ->
                 Log.e("FirestoreData", "Error al obtener datos de Firestore: $e")
             }
+    }
+    override fun onItemClick(supermercado: SuperMercado) {
+        val intent= Intent(this,ProductosMercado::class.java)
+        intent.putExtra("NombreEmpresa",supermercado.nombre)
+        startActivity(intent)
     }
 
 }

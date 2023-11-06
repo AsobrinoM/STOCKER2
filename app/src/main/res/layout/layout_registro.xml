@@ -4,42 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <EditText
         android:id="@+id/ETPWBEmp"
         android:layout_width="219dp"
         android:layout_height="57dp"
-        android:layout_marginTop="116dp"
         android:layout_marginEnd="108dp"
         android:ems="10"
         android:hint="@string/Web"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ETID" />
+        app:layout_constraintTop_toBottomOf="@+id/ETTLF" />
 
     <EditText
         android:id="@+id/ETTLF"
         android:layout_width="219dp"
         android:layout_height="57dp"
-        android:layout_marginTop="60dp"
         android:layout_marginEnd="108dp"
         android:ems="10"
         android:hint="@string/tlf"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ETID" />
-
-    <Button
-        android:id="@+id/btnSalirReg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
-        android:onClick="volver"
-        android:text="@string/btnExit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ETCiuEmpr" />
 
     <EditText
         android:id="@+id/ETID"
@@ -69,24 +62,25 @@
         android:id="@+id/ETNomEmpr"
         android:layout_width="219dp"
         android:layout_height="57dp"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="108dp"
         android:ems="10"
         android:hint="@string/txtNomb"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/lbIntDat" />
 
     <TextView
         android:id="@+id/lbIntDat"
-        android:layout_width="193dp"
-        android:layout_height="60dp"
+        android:layout_width="307dp"
+        android:layout_height="27dp"
 
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="136dp"
         android:text="@string/LbIntReg"
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.426"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -94,10 +88,10 @@
         android:id="@+id/btnRegReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
+        android:layout_marginTop="40dp"
         android:text="@string/btnRegEmp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSalirReg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.453"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ETPWBEmp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

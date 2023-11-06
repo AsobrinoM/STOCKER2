@@ -3,6 +3,7 @@ package com.example.stocker2
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stocker2.databinding.LayoutInicioSesionBinding
@@ -12,18 +13,23 @@ class ActividadInicioSesion: AppCompatActivity() {
     public lateinit var binding: LayoutInicioSesionBinding
     private val db= FirebaseFirestore.getInstance()
     private val myCollection=db.collection("supermercados")
-
+    private lateinit var btn_atras: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXml()
         binding.BTNABREREG.visibility=View.INVISIBLE
         binding.BTNABREREG.isEnabled=false
-        binding.btnIniSec.setOnClickListener{
+        binding.btnIniSec.setOnClickListener {
             btInicioSesion()
-
-
         }
+            setSupportActionBar(binding.appbar.toolb)
+            supportActionBar?.setDisplayShowTitleEnabled(false)
+            btn_atras=findViewById(R.id.btn_atras)
+            btn_atras.setOnClickListener{
+                finish()
+            }
+
 
     }
     private fun crearObjetosDelXml(){
@@ -35,7 +41,7 @@ class ActividadInicioSesion: AppCompatActivity() {
     myCollection.document(binding.ETISN.text.toString()).get()
         .addOnSuccessListener {
             if(it.exists()){
-                val pagWeb:String?=it.get("Página Web").toString()
+                val pagWeb:String?=it.get("paginaweb").toString()
                 val tlf:String?=it.get("Telefono").toString()
                 if (it.get("Contraseña").toString()==binding.etISC.text.toString()){
                         resultadoOperacion("Bienvenido!" )
