@@ -12,6 +12,11 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.stocker2.databinding.ActivityProductosMercadoBinding
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
 
 
 class ProductosMercado : AppCompatActivity() {
@@ -70,33 +75,57 @@ class ProductosMercado : AppCompatActivity() {
 
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val objIntent: Intent =intent
-        var NombreEmpresa=objIntent.getStringExtra("NombreEmpresa")
-        var pagWeb=""
-        var tlf=""
+        val objIntent: Intent = intent
+        val NombreEmpresa = objIntent.getStringExtra("NombreEmpresa")
+        var pagWeb = ""
+        var tlf = ""
+
         if (NombreEmpresa != null) {
             supermercados
                 .document(NombreEmpresa)
                 .get()
-                .addOnSuccessListener {
-                    pagWeb=it.get("paginaweb").toString()
-                    tlf = it.get("Telefono").toString()
+                .addOnSuccessListener { snapshot ->
+                    pagWeb = snapshot.get("paginaweb").toString()
+                    tlf = snapshot.get("Telefono").toString()
                 }
         }
-        return when (item.itemId) {
-            R.id.Web->{
-                    abrirPagina(pagWeb)
-                true
+
+        // Utiliza una función suspendida para esperar a que las operaciones asincrónicas se completen
+        GlobalScope.launch {
+            val webReady = waitForData { pagWeb.isNotEmpty() }
+            val tlfReady = waitForData { tlf.isNotEmpty() }
+
+            if (webReady && tlfReady) {
+                when (item.itemId) {
+                    R.id.Web -> {
+                        abrirPagina(pagWeb)
+                    }
+                    R.id.Contactartlfn -> {
+                        llamarTelefono(tlf)
+                    }
+                    else -> super.onOptionsItemSelected(item)
+                }
             }
-            R.id.Contactartlfn->{
-
-                    llamarTelefono(tlf)
-
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
         }
+
+        return true
+    }
+
+    private suspend fun waitForData(condition: () -> Boolean) = suspendCancellableCoroutine<Boolean> { cont ->
+        val checkInterval = 100 // Intervalo de comprobación en milisegundos
+
+        fun checkCondition() {
+            if (condition()) {
+                cont.resume(true)
+            } else {
+                GlobalScope.launch {
+                    delay(checkInterval.toLong())
+                    checkCondition()
+                }
+            }
+        }
+
+        checkCondition()
     }
     fun abrirPagina(PagWeb:String) {
         // Para ésta, el ACTION_VIEW va a buscar una página que abrir
