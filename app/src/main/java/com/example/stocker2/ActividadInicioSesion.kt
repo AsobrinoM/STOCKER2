@@ -42,13 +42,13 @@ class ActividadInicioSesion: AppCompatActivity() {
         .addOnSuccessListener {
             if(it.exists()){
                 val pagWeb:String?=it.get("paginaweb").toString()
-                val tlf:String?=it.get("Telefono").toString()
+                val correo:String?=it.get("correo").toString()
                 if (it.get("Contraseña").toString()==binding.etISC.text.toString()){
                         resultadoOperacion("Bienvenido!" )
                     val intent= Intent(this,ActivityIngresoProductos::class.java)
                     intent.putExtra("NombreEmpresa",nombEmp)
                     intent.putExtra("PaginaWeb",pagWeb)
-                    intent.putExtra("Telefono",tlf)
+                    intent.putExtra("correo",correo)
                     startActivity(intent)
 
 
@@ -83,9 +83,4 @@ class ActividadInicioSesion: AppCompatActivity() {
         startActivity(intent)
     }
 
-
-    fun volver (view: View){
-
-        finish()
-    }
 }

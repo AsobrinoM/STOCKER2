@@ -7,14 +7,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.stocker2.databinding.ActivityIngresoProductosBinding
-import com.example.stocker2.databinding.LayoutRegistroBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import java.util.Objects
@@ -71,7 +68,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val objIntent: Intent =intent
         var PagWeb=objIntent.getStringExtra("PaginaWeb")
-        var TLF=objIntent.getStringExtra("Telefono")
+        var email=objIntent.getStringExtra("correo")
         return when (item.itemId) {
                 R.id.Web->{
                     if (PagWeb != null) {
@@ -79,16 +76,19 @@ class ActivityIngresoProductos : AppCompatActivity() {
                     }
                     true
                 }
-            R.id.Contactartlfn->{
-                if (TLF != null) {
-                    llamarTelefono(TLF)
-                }
+            R.id.Contactaremail->{
+                    if (email != null) {
+                        mandarCorreo(email)
+                    }
+
                 true
             }
 
-            else -> super.onOptionsItemSelected(item)
+            else -> {super.onOptionsItemSelected(item)}
         }
-    }
+
+        }
+
 
 
     private fun guardarRegistro(NombreEmpresa:String){
@@ -173,9 +173,17 @@ class ActivityIngresoProductos : AppCompatActivity() {
 
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PagWeb)))
     }}
-    fun llamarTelefono(TLF:String) {
+    fun mandarCorreo(email:String) {
 
-        startActivity(Intent(Intent.ACTION_DIAL, Uri.parse(TLF)))
+        startActivity(
+            Intent(Intent.ACTION_VIEW).apply {
+                type="text/plain"
+                putExtra(Intent.EXTRA_SUBJECT,"Contacto a empresa")
+                putExtra(Intent.EXTRA_TEXT,"")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+
+            }
+        )
     }
 
 }

@@ -42,7 +42,7 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
 
         fun render(Super: SuperMercado) {
             binding.textViewNombre.text = Super.nombre
-            binding.textViewTelefono.text = Super.Telefono
+            binding.textViewCorreo.text = Super.Correo
             binding.textViewCiudad.text = Super.Ciudad
             Glide.with(binding.imageViewProducto.context)
                 .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5GuV8OQCtWOlFIAOGTqpeKXuGUwFYHin5yA&usqp=CAU")

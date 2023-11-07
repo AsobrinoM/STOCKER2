@@ -17,10 +17,10 @@
             android:layout_height="match_parent" >
 
             <item
-                android:id="@+id/Contactartlfn"
+                android:id="@+id/Contactaremail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:title="@string/strllamar" />
+                android:title="@string/mandar_email" />
         </menu>
     </item>
     <item

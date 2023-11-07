@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -78,7 +79,7 @@ class ProductosMercado : AppCompatActivity() {
         val objIntent: Intent = intent
         val NombreEmpresa = objIntent.getStringExtra("NombreEmpresa")
         var pagWeb = ""
-        var tlf = ""
+        var email = ""
 
         if (NombreEmpresa != null) {
             supermercados
@@ -86,22 +87,22 @@ class ProductosMercado : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { snapshot ->
                     pagWeb = snapshot.get("paginaweb").toString()
-                    tlf = snapshot.get("Telefono").toString()
+                    email = snapshot.get("correo").toString()
                 }
         }
 
         // Utiliza una función suspendida para esperar a que las operaciones asincrónicas se completen
         GlobalScope.launch {
             val webReady = waitForData { pagWeb.isNotEmpty() }
-            val tlfReady = waitForData { tlf.isNotEmpty() }
+            val emailReady = waitForData { email.isNotEmpty() }
 
-            if (webReady && tlfReady) {
+            if (webReady && emailReady) {
                 when (item.itemId) {
                     R.id.Web -> {
                         abrirPagina(pagWeb)
                     }
-                    R.id.Contactartlfn -> {
-                        llamarTelefono(tlf)
+                    R.id.Contactaremail -> {
+                        mandarEmail(email)
                     }
                     else -> super.onOptionsItemSelected(item)
                 }
@@ -135,12 +136,20 @@ class ProductosMercado : AppCompatActivity() {
         else{
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PagWeb)))
         }}
-    fun llamarTelefono(TLF:String) {
-        if (TLF.isEmpty()||TLF.isBlank()){
+    fun mandarEmail(email:String) {
+        if (email.isEmpty()||email.isBlank()){
             Toast.makeText(this,"EL supermercado no tiene teléfono al que contactar", Toast.LENGTH_LONG).show()
         }
         else{
-            startActivity(Intent(Intent.ACTION_DIAL, Uri.parse(TLF)))
+            startActivity(
+                Intent(Intent.ACTION_VIEW).apply {
+                    type="text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT,"Contacto a empresa")
+                    putExtra(Intent.EXTRA_TEXT,"")
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+
+                }
+            )
         }
 
     }

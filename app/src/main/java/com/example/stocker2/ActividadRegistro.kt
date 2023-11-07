@@ -67,7 +67,7 @@ class ActividadRegistro: AppCompatActivity() {
                     "id" to nuevoId,
                     "Contraseña" to contrasena,
                     "Ciudad" to binding.ETCiuEmpr.text.toString(),
-                    "Telefono" to binding.ETTLF.text.toString(),
+                    "correo" to binding.ETTLF.text.toString(),
                     "paginaweb" to binding.ETPWBEmp.text.toString()
                 )
 
@@ -90,6 +90,8 @@ class ActividadRegistro: AppCompatActivity() {
         binding.ETID.setText("")
         binding.ETCiuEmpr.setText("")
         binding.ETNomEmpr.setText("")
+        binding.ETPWBEmp.setText("")
+        binding.ETTLF.setText("")
         Toast.makeText(this,mensaje, Toast.LENGTH_LONG).show()
     }
 
