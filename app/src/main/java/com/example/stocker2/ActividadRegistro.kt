@@ -1,6 +1,9 @@
 package com.example.stocker2
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -33,53 +36,81 @@ class ActividadRegistro: AppCompatActivity() {
         binding=LayoutRegistroBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-    fun btguardarRegistro() {
-        val nombreEmpresa = binding.ETNomEmpr.text.toString()
-        val contrasena = binding.ETID.text.toString()
-
-        if (nombreEmpresa.isEmpty() || contrasena.isEmpty()) {
-            resultadoOperacion("El nombre de la empresa y la contraseña no pueden estar vacíos")
-            return
-        }
-
-        // Consulta para obtener el último documento (ordenado por id de forma descendente)
-        myCollection
-            .orderBy("id", Query.Direction.DESCENDING)
-            .limit(1)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                var nuevoId = 1 // Valor predeterminado si no hay supermercados
-
-                if (!querySnapshot.isEmpty) {
-                    val ultimoSupermercado = querySnapshot.documents[0]
-                    val ultimoId = ultimoSupermercado.getLong("id")
-                    if (ultimoId != null) {
-                        nuevoId = (ultimoId + 1).toInt()
-                    }
-                }
-                // Datos del nuevo supermercado, incluyendo el nuevo id
-                val data = hashMapOf(
-                    "id" to nuevoId,
-                    "Contraseña" to contrasena,
-                    "Ciudad" to binding.ETCiuEmpr.text.toString(),
-                    "correo" to binding.ETTLF.text.toString(),
-                    "paginaweb" to binding.ETPWBEmp.text.toString()
-                )
-
-                // Guarda el nuevo supermercado en la colección existente
-                myCollection
-                    .document(nombreEmpresa)
-                    .set(data)
-                    .addOnSuccessListener {
-                        resultadoOperacion("Registro guardado correctamente")
-                        finish()
-                    }
-            }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main2, menu)
+        return true
     }
 
-    fun volver (view: View){
+        fun btguardarRegistro() {
+            val nombreEmpresa = binding.ETNomEmpr.text.toString()
+            val contrasena = binding.ETID.text.toString()
 
-        finish()
+            if (nombreEmpresa.isEmpty() || contrasena.isEmpty()) {
+                resultadoOperacion("El nombre de la empresa y la contraseña no pueden estar vacíos")
+                return
+            }
+
+            // Realiza una consulta para buscar documentos con el mismo nombre y contraseña
+            myCollection
+                .whereEqualTo("nombre", nombreEmpresa)
+                .whereEqualTo("Contraseña", contrasena)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        // Ya existe un registro con el mismo nombre y contraseña
+                        resultadoOperacion("Este super con esta contraseña ya está registrada. Introduce otra")
+                    } else {
+                        myCollection
+                            .orderBy("id", Query.Direction.DESCENDING)
+                            .limit(1)
+                            .get()
+                            .addOnSuccessListener { querySnapshot ->
+                                val nuevoId = if (!querySnapshot.isEmpty) {
+                                    val ultimoSupermercado = querySnapshot.documents[0]
+                                    val ultimoId = ultimoSupermercado.getLong("id")
+                                    ultimoId?.toInt()?.plus(1) ?: 1
+                                } else {
+                                    1
+                                }
+
+                                // Datos del nuevo supermercado, incluyendo el nuevo ID
+                                val data = hashMapOf(
+                                    "id" to nuevoId,
+                                    "nombre" to nombreEmpresa,
+                                    "Contraseña" to contrasena,
+                                    "Ciudad" to binding.ETCiuEmpr.text.toString(),
+                                    "correo" to binding.ETTLF.text.toString(),
+                                    "paginaweb" to binding.ETPWBEmp.text.toString()
+                                )
+
+                                // Guarda el nuevo supermercado en la colección existente
+                                myCollection
+                                    .document(nuevoId.toString())
+                                    .set(data)
+                                    .addOnSuccessListener {
+                                        resultadoOperacion("Registro guardado correctamente")
+                                        finish()
+                                    }
+                            }
+                    }
+                }
+        }
+
+        // Realiza una consulta para obtener todos los documentos y encontrar el último ID
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.AcDe ->{
+                val intent= Intent(this,AcercaDeActivity::class.java)
+                startActivity(intent)
+                true
+            }
+
+
+            else -> {super.onOptionsItemSelected(item)}
+        }
+
     }
     private fun resultadoOperacion(mensaje:String){
         binding.ETID.setText("")

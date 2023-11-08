@@ -26,5 +26,12 @@
         android:icon="@drawable/common_google_signin_btn_icon_dark"
         android:title="@string/strAccWeb"
         app:showAsAction="always|collapseActionView|withText" />
+    <item
+        android:id="@+id/AcDe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="@string/strAccWeb"
+        app:showAsAction="always|collapseActionView|withText" />
 
 </menu>

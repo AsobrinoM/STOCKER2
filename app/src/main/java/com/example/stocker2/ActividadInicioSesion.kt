@@ -2,6 +2,8 @@ package com.example.stocker2
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
@@ -36,42 +38,53 @@ class ActividadInicioSesion: AppCompatActivity() {
         binding=LayoutInicioSesionBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-    fun btInicioSesion(){
-        val nombEmp:String?=binding.ETISN.text.toString()
-    myCollection.document(binding.ETISN.text.toString()).get()
-        .addOnSuccessListener {
-            if(it.exists()){
-                val pagWeb:String?=it.get("paginaweb").toString()
-                val correo:String?=it.get("correo").toString()
-                if (it.get("Contraseña").toString()==binding.etISC.text.toString()){
-                        resultadoOperacion("Bienvenido!" )
-                    val intent= Intent(this,ActivityIngresoProductos::class.java)
-                    intent.putExtra("NombreEmpresa",nombEmp)
-                    intent.putExtra("PaginaWeb",pagWeb)
-                    intent.putExtra("correo",correo)
-                    startActivity(intent)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main2, menu)
+        return true
+    }
+    fun btInicioSesion() {
+        val nombreEmpresa: String = binding.ETISN.text.toString()
+        val contrasena: String = binding.etISC.text.toString()
 
-
-                }
-                else{
-                        resultadoOperacion("La contraseña que has introducido no es correcta, intentalo de nuevo")
-
-                }
-
-
-            }
-            else{
-                resultadoOperacion("Esta empresa no está registrada, Quieres Registrarte?")
-                binding.BTNABREREG.visibility=View.VISIBLE
-                binding.BTNABREREG.isEnabled=true
-            }
-
-
+        if (nombreEmpresa.isEmpty() || contrasena.isEmpty()) {
+            resultadoOperacion("El nombre de la empresa y la contraseña no pueden estar vacíos")
+            return
         }
 
+        myCollection
+            .whereEqualTo("nombre", nombreEmpresa)
+            .whereEqualTo("Contraseña", contrasena)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val documento = querySnapshot.documents[0]
+                    val idAbuscar = documento["id"].toString()
+                    if (idAbuscar != null) {
+                        myCollection.document(idAbuscar).get()
+                            .addOnSuccessListener {
+                                val pagWeb:String=it.get("paginaweb").toString()
+                                val correo:String=it.get("correo").toString()
+                                val id:String=it.get("id").toString()
+                                resultadoOperacion("Bienvenido!")
+                                val intent= Intent(this,ActivityIngresoProductos::class.java)
+                                intent.putExtra("id",id)
+                                intent.putExtra("PaginaWeb",pagWeb)
+                                intent.putExtra("correo",correo)
+                                startActivity(intent)
+                                                    }
 
-
+                    } else {
+                        resultadoOperacion("Error: ID no válido para esta empresa.")
+                    }
+                } else {
+                    resultadoOperacion("Esta empresa no está registrada. ¿Quieres registrarte?")
+                    binding.BTNABREREG.visibility = View.VISIBLE
+                    binding.BTNABREREG.isEnabled = true
+                }
+            }
     }
+
+
     private fun resultadoOperacion(mensaje:String){
         binding.ETISN.setText("")
         binding.etISC.setText("")
@@ -82,5 +95,21 @@ class ActividadInicioSesion: AppCompatActivity() {
         val intent= Intent(this,ActividadRegistro::class.java)
         startActivity(intent)
     }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.AcDe ->{
+                val intent= Intent(this,AcercaDeActivity::class.java)
+                startActivity(intent)
+                true
+            }
+
+
+            else -> {super.onOptionsItemSelected(item)}
+        }
+
+    }
 
 }
+/**
+ *
+ */

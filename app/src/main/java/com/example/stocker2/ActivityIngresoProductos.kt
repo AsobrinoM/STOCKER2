@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.example.stocker2.databinding.ActivityIngresoProductosBinding
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import java.util.Objects
@@ -31,22 +32,22 @@ class ActivityIngresoProductos : AppCompatActivity() {
         setSupportActionBar(binding.appbar.toolb)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         val objIntent: Intent =intent
-        var NombreEmpresa=objIntent.getStringExtra("NombreEmpresa")
+        var id=objIntent.getStringExtra("id")
 
         binding.btnGuardarProducto.setOnClickListener{
 
-            if (NombreEmpresa != null) {
-                guardarRegistro(NombreEmpresa)
+            if (id != null) {
+                guardarRegistro(id)
                 GlobalScope.launch {
                     delay(1000)
-                    if (NombreEmpresa != null) {
-                        listarDocumento(NombreEmpresa)
+                    if (id != null) {
+                        listarDocumento(id)
                     }
                 }
             }
         }
-        if (NombreEmpresa != null) {
-            listarDocumento(NombreEmpresa)
+        if (id != null) {
+            listarDocumento(id)
         }
         btn_atras=findViewById(R.id.btn_atras)
         btn_atras.setOnClickListener{
@@ -83,6 +84,12 @@ class ActivityIngresoProductos : AppCompatActivity() {
 
                 true
             }
+            R.id.AcDe ->{
+                val intent= Intent(this,AcercaDeActivity::class.java)
+                startActivity(intent)
+                true
+            }
+
 
             else -> {super.onOptionsItemSelected(item)}
         }
@@ -91,27 +98,22 @@ class ActivityIngresoProductos : AppCompatActivity() {
 
 
 
-    private fun guardarRegistro(NombreEmpresa:String){
-
-
-
+    private fun guardarRegistro(id:String){
         if (binding.etNombProd.text.toString().isEmpty() || binding.etCantProd.text.toString().isEmpty()) {
-            resultadoOperacion("El nombre del produco y la cantidad no pueden estar vacíos")
-            if (NombreEmpresa != null) {
-                listarDocumento(NombreEmpresa)
-            }
+            resultadoOperacion("ni nombre del produco ni la cantidad pueden estar vacíos")
+            listarDocumento(id)
             return
         }
 
-           myCollection.document(NombreEmpresa).get()
+           myCollection.document(id).get()
             .addOnSuccessListener {
                     if (it.contains(binding.etNombProd.text.toString())){
-                        myCollection.document(NombreEmpresa).set(
+                        myCollection.document(id).set(
                             hashMapOf(
                                 binding.etNombProd.text.toString() to (binding.etCantProd.text.toString().toInt()+it.get(binding.etNombProd.text.toString()).toString().toInt())
                             ), SetOptions.merge())
                             .addOnSuccessListener {
-                                resultadoOperacion("Se ha añadido la cantidad Correspondiente")
+                                eliminarSieso(id,binding.etNombProd.text.toString())
 
                             }
                             .addOnFailureListener{
@@ -120,7 +122,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
                             }
                     }
                     else{
-                        myCollection.document(NombreEmpresa).set(
+                        myCollection.document(id).set(
                             hashMapOf(
                                 binding.etNombProd.text.toString() to (binding.etCantProd.text.toString().toInt())
                             ), SetOptions.merge())
@@ -136,6 +138,33 @@ class ActivityIngresoProductos : AppCompatActivity() {
     }
 
 
+    }
+    private fun eliminarSieso(id: String, nombreProducto: String) {
+        myCollection.document(id).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val cantidadActual = documentSnapshot.getLong(nombreProducto)
+
+                if (cantidadActual != null) {
+                    if (cantidadActual <= 0) {
+                        // El producto tiene una cantidad igual o menor a 0, por lo que se eliminará
+                        val data = HashMap<String, Any>()
+                        data[nombreProducto] = FieldValue.delete()
+
+                        myCollection.document(id)
+                            .update(data)
+                            .addOnSuccessListener {
+                                resultadoOperacion("El producto se ha eliminado debido a que su cantidad ha bajado a 0.")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.e("Firebase Delete Error", e.message, e)
+                            }
+                    }
+                    else{
+                        resultadoOperacion("El producto se ha editado correctamente")
+                    }
+                }
+
+            }
     }
     private fun listarDocumento(nombreDocumento: String) {
         myCollection

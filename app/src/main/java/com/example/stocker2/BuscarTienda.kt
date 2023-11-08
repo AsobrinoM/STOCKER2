@@ -49,7 +49,6 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         binding = ActivityBuscarTiendaBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-
     private fun initRecicleView() {
         val decoration = DividerItemDecoration(this, manager.orientation)
         binding.recyclerMercados.layoutManager = manager
@@ -58,16 +57,15 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         binding.recyclerMercados.addItemDecoration(decoration)
         adapter.setOnItemClickListener(this)
     }
-
     private fun cargarDatosDesdeFirestore() {
         myCollection
             .get()
             .addOnSuccessListener { querySnapshot ->
                 val supermercados = ArrayList<SuperMercado>()
                 for (document in querySnapshot) {
-                    val nombreSupermercado = document.id // Nombre del documento en Firestore
+                    // Nombre del documento en Firestore
                     var supermercado = document.toObject(SuperMercado::class.java)
-                    supermercado.nombre = nombreSupermercado // Asignar el nombre del supermercado
+                    // Asignar el nombre del supermercado
                     supermercados.add(supermercado)
                 }
                 Log.d("FirestoreData", "Supermercados: $supermercados")
@@ -80,6 +78,7 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
     override fun onItemClick(supermercado: SuperMercado) {
         val intent= Intent(this,ProductosMercado::class.java)
         intent.putExtra("NombreEmpresa",supermercado.nombre)
+        intent.putExtra("id",supermercado.id.toString())
         startActivity(intent)
     }
 

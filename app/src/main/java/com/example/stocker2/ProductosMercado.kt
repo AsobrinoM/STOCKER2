@@ -29,9 +29,14 @@ class ProductosMercado : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val objIntent: Intent = intent
         var NombreEmpresa: String? = null
+        var id:String?=null
         if (objIntent.hasExtra("NombreEmpresa")) {
             NombreEmpresa = objIntent.getStringExtra("NombreEmpresa")
         }
+        if (objIntent.hasExtra("id")){
+            id=objIntent.getStringExtra("id")
+        }
+
         super.onCreate(savedInstanceState)
         crearObjetosDelXML()
         binding.textViewNombMerc.text=NombreEmpresa
@@ -41,17 +46,17 @@ class ProductosMercado : AppCompatActivity() {
         btn_atras.setOnClickListener{
             finish()
         }
-        if (NombreEmpresa != null) {
-            listarDocumento(NombreEmpresa)
+        if (id != null) {
+            listarDocumento(id)
         }
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main_act1, menu)
         return true
     }
-    private fun listarDocumento(NombreEmpresa:String) {
+    private fun listarDocumento(id:String) {
             productos
-                .document(NombreEmpresa)
+                .document(id)
                 .get()
                 .addOnSuccessListener { resultado ->
                     val data = resultado.data
@@ -67,13 +72,13 @@ class ProductosMercado : AppCompatActivity() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val objIntent: Intent = intent
-        val NombreEmpresa = objIntent.getStringExtra("NombreEmpresa")
+        val id = objIntent.getStringExtra("id")
 
         return when (item.itemId) {
             R.id.Web -> {
-                if (NombreEmpresa != null) {
+                if (id != null) {
                     supermercados
-                        .document(NombreEmpresa)
+                        .document(id)
                         .get()
                         .addOnSuccessListener { snapshot ->
                             val pagWeb = snapshot.getString("paginaweb")
@@ -87,9 +92,9 @@ class ProductosMercado : AppCompatActivity() {
                 true
             }
             R.id.Contactaremail -> {
-                if (NombreEmpresa != null) {
+                if (id != null) {
                     supermercados
-                        .document(NombreEmpresa)
+                        .document(id)
                         .get()
                         .addOnSuccessListener { snapshot ->
                             val email = snapshot.getString("correo")
@@ -100,6 +105,11 @@ class ProductosMercado : AppCompatActivity() {
                             }
                         }
                 }
+                true
+            }
+            R.id.AcDe ->{
+                val intent= Intent(this,AcercaDeActivity::class.java)
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
