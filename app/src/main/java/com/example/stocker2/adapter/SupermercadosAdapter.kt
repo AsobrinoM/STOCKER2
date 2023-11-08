@@ -28,7 +28,7 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
         return supermercados.size
     }
 
-    inner class SuperMercadoViewHolder(private val binding: ItemSupermercadoBinding) :
+    inner class SuperMercadoViewHolder(private val binding: ItemSupermercadoBinding):
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -42,7 +42,7 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
 
         fun render(Super: SuperMercado) {
             binding.textViewNombre.text = Super.nombre
-            binding.textViewCorreo.text = Super.Correo
+            binding.textViewCE.text = Super.correo
             binding.textViewCiudad.text = Super.Ciudad
             Glide.with(binding.imageViewProducto.context)
                 .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5GuV8OQCtWOlFIAOGTqpeKXuGUwFYHin5yA&usqp=CAU")

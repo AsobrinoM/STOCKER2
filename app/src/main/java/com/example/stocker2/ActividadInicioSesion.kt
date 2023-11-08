@@ -10,7 +10,7 @@ import com.example.stocker2.databinding.LayoutInicioSesionBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ActividadInicioSesion: AppCompatActivity() {
-    public lateinit var binding: LayoutInicioSesionBinding
+    lateinit var binding: LayoutInicioSesionBinding
     private val db= FirebaseFirestore.getInstance()
     private val myCollection=db.collection("supermercados")
     private lateinit var btn_atras: ImageView

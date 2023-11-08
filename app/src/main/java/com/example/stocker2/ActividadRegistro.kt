@@ -15,8 +15,6 @@ class ActividadRegistro: AppCompatActivity() {
     private lateinit var btn_atras: ImageView
     private val db= FirebaseFirestore.getInstance()
     private val myCollection=db.collection("supermercados")
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXml()
@@ -34,9 +32,7 @@ class ActividadRegistro: AppCompatActivity() {
     private fun crearObjetosDelXml(){
         binding=LayoutRegistroBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
     }
-
     fun btguardarRegistro() {
         val nombreEmpresa = binding.ETNomEmpr.text.toString()
         val contrasena = binding.ETID.text.toString()
@@ -61,7 +57,6 @@ class ActividadRegistro: AppCompatActivity() {
                         nuevoId = (ultimoId + 1).toInt()
                     }
                 }
-
                 // Datos del nuevo supermercado, incluyendo el nuevo id
                 val data = hashMapOf(
                     "id" to nuevoId,

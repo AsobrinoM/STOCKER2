@@ -23,19 +23,15 @@ import kotlin.coroutines.resume
 class ProductosMercado : AppCompatActivity() {
     private lateinit var binding:ActivityProductosMercadoBinding
     private lateinit var btn_atras: ImageView
-
     private val db= FirebaseFirestore.getInstance()
     private val productos=db.collection("Productos")
     private val supermercados=db.collection("supermercados")
     override fun onCreate(savedInstanceState: Bundle?) {
-
         val objIntent: Intent = intent
         var NombreEmpresa: String? = null
-
         if (objIntent.hasExtra("NombreEmpresa")) {
             NombreEmpresa = objIntent.getStringExtra("NombreEmpresa")
         }
-
         super.onCreate(savedInstanceState)
         crearObjetosDelXML()
         binding.textViewNombMerc.text=NombreEmpresa
@@ -48,9 +44,6 @@ class ProductosMercado : AppCompatActivity() {
         if (NombreEmpresa != null) {
             listarDocumento(NombreEmpresa)
         }
-
-
-
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main_act1, menu)
@@ -58,7 +51,7 @@ class ProductosMercado : AppCompatActivity() {
     }
     private fun listarDocumento(NombreEmpresa:String) {
             productos
-                .document(NombreEmpresa!!)
+                .document(NombreEmpresa)
                 .get()
                 .addOnSuccessListener { resultado ->
                     val data = resultado.data
@@ -70,64 +63,50 @@ class ProductosMercado : AppCompatActivity() {
                         val textView = TextView(this)
                         textView.text = "$key: $value"
                         linearLayoutContainer.addView(textView)
-                    }
-                }
-
-
+                    } }
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val objIntent: Intent = intent
         val NombreEmpresa = objIntent.getStringExtra("NombreEmpresa")
-        var pagWeb = ""
-        var email = ""
 
-        if (NombreEmpresa != null) {
-            supermercados
-                .document(NombreEmpresa)
-                .get()
-                .addOnSuccessListener { snapshot ->
-                    pagWeb = snapshot.get("paginaweb").toString()
-                    email = snapshot.get("correo").toString()
+        return when (item.itemId) {
+            R.id.Web -> {
+                if (NombreEmpresa != null) {
+                    supermercados
+                        .document(NombreEmpresa)
+                        .get()
+                        .addOnSuccessListener { snapshot ->
+                            val pagWeb = snapshot.getString("paginaweb")
+                            if (!pagWeb.isNullOrBlank()) {
+                                abrirPagina(pagWeb)
+                            } else {
+                                Toast.makeText(this, "El supermercado no tiene página web", Toast.LENGTH_LONG).show()
+                            }
+                        }
                 }
-        }
-
-        // Utiliza una función suspendida para esperar a que las operaciones asincrónicas se completen
-        GlobalScope.launch {
-            val webReady = waitForData { pagWeb.isNotEmpty() }
-            val emailReady = waitForData { email.isNotEmpty() }
-
-            if (webReady && emailReady) {
-                when (item.itemId) {
-                    R.id.Web -> {
-                        abrirPagina(pagWeb)
-                    }
-                    R.id.Contactaremail -> {
-                        mandarEmail(email)
-                    }
-                    else -> super.onOptionsItemSelected(item)
-                }
+                true
             }
+            R.id.Contactaremail -> {
+                if (NombreEmpresa != null) {
+                    supermercados
+                        .document(NombreEmpresa)
+                        .get()
+                        .addOnSuccessListener { snapshot ->
+                            val email = snapshot.getString("correo")
+                            if (!email.isNullOrBlank()) {
+                                mandarEmail(email)
+                            } else {
+                                Toast.makeText(this, "El supermercado no tiene correo electrónico", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-
-        return true
     }
 
-    private suspend fun waitForData(condition: () -> Boolean) = suspendCancellableCoroutine<Boolean> { cont ->
-        val checkInterval = 100 // Intervalo de comprobación en milisegundos
 
-        fun checkCondition() {
-            if (condition()) {
-                cont.resume(true)
-            } else {
-                GlobalScope.launch {
-                    delay(checkInterval.toLong())
-                    checkCondition()
-                }
-            }
-        }
-
-        checkCondition()
-    }
     fun abrirPagina(PagWeb:String) {
         // Para ésta, el ACTION_VIEW va a buscar una página que abrir
         if (PagWeb.isEmpty()||PagWeb.isBlank()){
@@ -135,23 +114,23 @@ class ProductosMercado : AppCompatActivity() {
         }
         else{
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PagWeb)))
-        }}
-    fun mandarEmail(email:String) {
-        if (email.isEmpty()||email.isBlank()){
-            Toast.makeText(this,"EL supermercado no tiene teléfono al que contactar", Toast.LENGTH_LONG).show()
         }
-        else{
-            startActivity(
-                Intent(Intent.ACTION_VIEW).apply {
-                    type="text/plain"
-                    putExtra(Intent.EXTRA_SUBJECT,"Contacto a empresa")
-                    putExtra(Intent.EXTRA_TEXT,"")
-                    putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+    }
+    fun mandarEmail(email: String) {
+        if (email.isEmpty() || email.isBlank()) {
+            Toast.makeText(this, "El supermercado no tiene una dirección de correo electrónico", Toast.LENGTH_LONG).show()
+        } else {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:$email")
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Contacto a empresa")
+            intent.putExtra(Intent.EXTRA_TEXT, "")
 
-                }
-            )
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "No se encontró una aplicación de correo electrónico.", Toast.LENGTH_LONG).show()
+            }
         }
-
     }
 
 
