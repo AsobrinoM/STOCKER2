@@ -14,17 +14,14 @@
 
     <ScrollView
         android:id="@+id/SV1"
-        android:layout_width="379dp"
-        android:layout_height="513dp"
+        android:layout_width="331dp"
+        android:layout_height="420dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="13dp"
-        android:layout_marginBottom="56dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNombMerc">
+        app:layout_constraintTop_toBottomOf="@+id/textViewDispon">
 
         <LinearLayout
             android:id="@+id/linearLayoutContainer"
@@ -37,11 +34,15 @@
         android:id="@+id/textViewNombMerc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="33dp"
         android:fontFamily="casual"
-        android:textAlignment="center"
+        android:text="AQUIVIENEELNOMBRE"
+        android:textAlignment="textStart"
         android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,17 +50,15 @@
         android:id="@+id/textViewDispon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="127dp"
-        android:layout_marginBottom="18dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="75dp"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/estos_son_nuestros_productos_disponibles"
         android:textAlignment="center"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/SV1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewNombMerc"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewNombMerc" />
 </androidx.constraintlayout.widget.ConstraintLayout>

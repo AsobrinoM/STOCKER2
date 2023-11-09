@@ -7,31 +7,24 @@
         android:id="@+id/action_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="@string/strCont"
+        android:title="Preferencias"
         app:showAsAction="never" >
         <menu
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
             <item
-                android:id="@+id/Contactaremail"
+                android:id="@+id/Preferencias"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:title="@string/mandar_email" />
+                android:title="Editar Preferencias" />
         </menu>
     </item>
-    <item
-        android:id="@+id/Web"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/common_google_signin_btn_icon_dark"
-        android:title="@string/strAccWeb"
-        app:showAsAction="always|collapseActionView|withText" />
     <item
         android:id="@+id/AcDe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@android:drawable/ic_dialog_info"
-        android:title="@string/strAccWeb"
+        android:title="@string/strAcDe"
         app:showAsAction="always|collapseActionView|withText" />
 
 </menu>

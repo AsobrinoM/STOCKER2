@@ -1,0 +1,16 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Página de ayuda: https://developer.android.com/reference/androidx/preference/PreferenceFragmentCompat -->
+
+    <PreferenceCategory app:title="Decide si quieres limitar tus busquedas a tu ciudad">
+
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/reply_entries"
+            app:entryValues="@array/reply_values"
+            app:key="Ciudad"
+            app:title="@string/reply_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

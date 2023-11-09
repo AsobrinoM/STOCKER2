@@ -48,6 +48,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.preference:preference-ktx:1.2.1")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation("com.google.firebase:firebase-firestore:24.9.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")

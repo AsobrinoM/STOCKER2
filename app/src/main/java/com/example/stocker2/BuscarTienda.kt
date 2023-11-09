@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
@@ -49,6 +51,10 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         binding = ActivityBuscarTiendaBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main3, menu)
+        return true
+    }
     private fun initRecicleView() {
         val decoration = DividerItemDecoration(this, manager.orientation)
         binding.recyclerMercados.layoutManager = manager
@@ -80,6 +86,23 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         intent.putExtra("NombreEmpresa",supermercado.nombre)
         intent.putExtra("id",supermercado.id.toString())
         startActivity(intent)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.AcDe ->{
+                val intent= Intent(this,AcercaDeActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.Preferencias ->{
+                val intent= Intent(this,PREFERENCIAS::class.java)
+                startActivity(intent)
+                true
+            }
+
+            else -> {super.onOptionsItemSelected(item)}
+        }
+
     }
 
 }

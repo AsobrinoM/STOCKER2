@@ -34,6 +34,8 @@
     <string name="correo_electr_nico">Correo Electrónico:</string>
     <string name="registrarse">Registrarse</string>
     <string name="mandar_email">Mandar Email</string>
+    <string name="que_es_stocker">¿Que es Stocker?</string>
+    <string name="reply_title" />
 
 
 </resources>
