@@ -11,11 +11,13 @@ class PREFERENCIAS : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferencias)
         if (savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.settings, PrefConfig())
+            supportFragmentManager                              // Llamamos al manejador de fragmentos
+                .beginTransaction()                             // Tenemos que pasarle el FrameLayout (SE LLAMA SETTINGS) en el que cargar el layout y
+                .replace(R.id.settings, PrefConfig())           // la CLASE que realiza esa carga (SettingsFragment)
                 .commit()
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
+
+
 }

@@ -11,8 +11,12 @@ class PrefConfig : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferencias, rootKey)
 
         // Configurar la barra de herramientas
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolb)
+        val btnAtras = toolbar.findViewById<ImageView>(R.id.btn_atras)
 
-
-
+        btnAtras.setOnClickListener {
+            // Acción cuando se hace clic en el botón de retroceso
+            requireActivity().supportFragmentManager.popBackStack()
+        }
     }
 }
