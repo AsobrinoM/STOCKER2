@@ -25,8 +25,8 @@
 
         <ListPreference
             app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
+            app:entries="@array/Guardar"
+            app:entryValues="@array/GuardarDisplay"
             app:key="boolgr"
             app:title="Guardar Registros?"
             app:useSimpleSummaryProvider="true" />

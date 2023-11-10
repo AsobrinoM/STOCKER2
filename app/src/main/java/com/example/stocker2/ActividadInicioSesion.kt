@@ -24,8 +24,8 @@ class ActividadInicioSesion: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXml()
-        val sharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
-        val siono=sharedPreferences.getString("boolgr","no")
+         sharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
+        var siono=sharedPreferences.getString("boolgr","no")
 
             if(siono=="si"){
                 bolguardo=true
@@ -93,6 +93,11 @@ class ActividadInicioSesion: AppCompatActivity() {
                         editor.putString("nombrealmacenado",nombreEmpresa)
                         editor.putString("contrasenaalmacenada",contrasena)
                         editor.putString("direccionalmacenada",direccion)
+                    }
+                    else{
+                        editor.putString("nombrealmacenado","")
+                        editor.putString("contrasenaalmacenada","")
+                        editor.putString("direccionalmacenada","")
                     }
 
 
