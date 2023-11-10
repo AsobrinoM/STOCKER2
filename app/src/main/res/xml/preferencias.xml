@@ -28,7 +28,7 @@
             app:entries="@array/Guardar"
             app:entryValues="@array/GuardarDisplay"
             app:key="boolgr"
-            app:title="Guardar Registros?"
+            app:title="¿Guardar Registros?"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 </PreferenceScreen>

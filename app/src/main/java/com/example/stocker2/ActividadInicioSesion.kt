@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -19,18 +20,27 @@ class ActividadInicioSesion: AppCompatActivity() {
     private val db= FirebaseFirestore.getInstance()
     private val myCollection=db.collection("supermercados")
     private lateinit var btn_atras: ImageView
-
-    var bolguardo=false
+    private var bolguardo=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXml()
+
          sharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
         var siono=sharedPreferences.getString("boolgr","no")
 
-            if(siono=="si"){
-                bolguardo=true
-            }
-
+        if(siono=="si"){
+            bolguardo=true
+            Log.d("controlis", " la preferencia se ha  actualizado")
+        }
+        if (bolguardo){
+            val txtnom=sharedPreferences.getString("nombrealmacenado","")
+            val txtcon=sharedPreferences.getString("contrasenaalmacenada","")
+            val txtdir=sharedPreferences.getString("direccionalmacenada","")
+            binding.ETISN.setText(txtnom)
+            binding.etISC.setText(txtcon)
+            binding.etOpcDir.setText(txtdir)
+            Log.d("controlis", " se supone que se han actualizado los registros asi: nombre= $txtnom , contaseña= $txtcon , direccion=$txtdir")
+        }
         binding.BTNABREREG.visibility=View.INVISIBLE
         binding.BTNABREREG.isEnabled=false
         binding.btnIniSec.setOnClickListener {
@@ -43,11 +53,7 @@ class ActividadInicioSesion: AppCompatActivity() {
                 finish()
             }
 
-        if (bolguardo){
-            binding.ETISN.setText(sharedPreferences.getString("nombrealmacenado",""))
-            binding.etISC.setText(sharedPreferences.getString("contrasenaalmacenada",""))
-            binding.etOpcDir.setText(sharedPreferences.getString("direccionalmacenada",""))
-        }
+
 
     }
     private fun crearObjetosDelXml(){
@@ -89,18 +95,12 @@ class ActividadInicioSesion: AppCompatActivity() {
                     val documento = querySnapshot.documents[0]
                     val idAbuscar = documento["id"].toString()
                     val editor = sharedPreferences.edit()
-                    if(bolguardo){
                         editor.putString("nombrealmacenado",nombreEmpresa)
                         editor.putString("contrasenaalmacenada",contrasena)
-                        editor.putString("direccionalmacenada",direccion)
-                    }
-                    else{
-                        editor.putString("nombrealmacenado","")
-                        editor.putString("contrasenaalmacenada","")
-                        editor.putString("direccionalmacenada","")
-                    }
-
-
+                    editor.putString("direccionalmacenada",direccion)
+                        editor.apply()
+                    val valorpreferences=sharedPreferences.getString("nombrealmacenado","")
+                    Log.d("controlis", " se presupone que este es el nombre almacenado $valorpreferences  ")
                     obtenerDatosEmpresa(idAbuscar)
                 } else {
                     resultadoOperacion("No se encontró ninguna empresa que coincida con los datos proporcionados.")
