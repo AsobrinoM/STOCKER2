@@ -11,8 +11,5 @@ class PrefConfig : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferencias, rootKey)
 
         // Configurar la barra de herramientas
-
-
-
     }
 }

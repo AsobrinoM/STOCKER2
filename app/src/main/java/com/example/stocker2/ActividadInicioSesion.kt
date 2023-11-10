@@ -1,6 +1,8 @@
 package com.example.stocker2
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -12,14 +14,23 @@ import com.example.stocker2.databinding.LayoutInicioSesionBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ActividadInicioSesion: AppCompatActivity() {
+    private lateinit var sharedPreferences: SharedPreferences
     lateinit var binding: LayoutInicioSesionBinding
     private val db= FirebaseFirestore.getInstance()
     private val myCollection=db.collection("supermercados")
     private lateinit var btn_atras: ImageView
 
+    var bolguardo=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXml()
+        val sharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
+        val siono=sharedPreferences.getString("boolgr","no")
+
+            if(siono=="si"){
+                bolguardo=true
+            }
+
         binding.BTNABREREG.visibility=View.INVISIBLE
         binding.BTNABREREG.isEnabled=false
         binding.btnIniSec.setOnClickListener {
@@ -32,6 +43,11 @@ class ActividadInicioSesion: AppCompatActivity() {
                 finish()
             }
 
+        if (bolguardo){
+            binding.ETISN.setText(sharedPreferences.getString("nombrealmacenado",""))
+            binding.etISC.setText(sharedPreferences.getString("contrasenaalmacenada",""))
+            binding.etOpcDir.setText(sharedPreferences.getString("direccionalmacenada",""))
+        }
 
     }
     private fun crearObjetosDelXml(){
@@ -57,6 +73,8 @@ class ActividadInicioSesion: AppCompatActivity() {
             return
         }
 
+
+
         verificarEmpresa(nombreEmpresa, contrasena, direccion)
     }
 
@@ -70,6 +88,13 @@ class ActividadInicioSesion: AppCompatActivity() {
                 if (!querySnapshot.isEmpty) {
                     val documento = querySnapshot.documents[0]
                     val idAbuscar = documento["id"].toString()
+                    val editor = sharedPreferences.edit()
+                    if(bolguardo){
+                        editor.putString("nombrealmacenado",nombreEmpresa)
+                        editor.putString("contrasenaalmacenada",contrasena)
+                        editor.putString("direccionalmacenada",direccion)
+                    }
+
 
                     obtenerDatosEmpresa(idAbuscar)
                 } else {
