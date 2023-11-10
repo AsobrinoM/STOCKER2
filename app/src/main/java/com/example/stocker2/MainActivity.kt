@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         btn_atras.setOnClickListener{
             finish()
         }
-
     }
     private fun crearObjetosDelXML(){
         binding=ActivityMainBinding.inflate(layoutInflater)
@@ -31,12 +30,14 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main3, menu)
         return true
     }
-
     fun abrirRegistrar(view: View){
         val intent= Intent(this,ActividadRegistro::class.java)
         startActivity(intent)
     }
-
+    fun abrirBuscarProducto(view: View){
+        val intent= Intent(this,BuscarProducto::class.java)
+        startActivity(intent)
+    }
     fun abrirInicioSec(view: View){
         val intent= Intent(this,ActividadInicioSesion::class.java)
         startActivity(intent)

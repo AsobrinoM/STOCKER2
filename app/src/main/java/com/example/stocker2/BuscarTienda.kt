@@ -53,16 +53,13 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         btn_atras.setOnClickListener{
             finish()
         }
-
     }
     /*
     private fun loadPref(){
         val mySharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
         val mensaje=mySharedPreferences.getString("ciudad","")
-
     }
     */
-
     private fun crearObjetosDelXml() {
         binding = ActivityBuscarTiendaBinding.inflate(layoutInflater)
         setContentView(binding.root)

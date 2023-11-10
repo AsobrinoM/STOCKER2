@@ -52,9 +52,6 @@ class ActividadInicioSesion: AppCompatActivity() {
             btn_atras.setOnClickListener{
                 finish()
             }
-
-
-
     }
     private fun crearObjetosDelXml(){
         binding=LayoutInicioSesionBinding.inflate(layoutInflater)
@@ -78,9 +75,6 @@ class ActividadInicioSesion: AppCompatActivity() {
             resultadoOperacion("Necesitas ingresar una dirección para buscar la empresa")
             return
         }
-
-
-
         verificarEmpresa(nombreEmpresa, contrasena, direccion)
     }
 
@@ -95,8 +89,8 @@ class ActividadInicioSesion: AppCompatActivity() {
                     val documento = querySnapshot.documents[0]
                     val idAbuscar = documento["id"].toString()
                     val editor = sharedPreferences.edit()
-                        editor.putString("nombrealmacenado",nombreEmpresa)
-                        editor.putString("contrasenaalmacenada",contrasena)
+                    editor.putString("nombrealmacenado",nombreEmpresa)
+                    editor.putString("contrasenaalmacenada",contrasena)
                     editor.putString("direccionalmacenada",direccion)
                         editor.apply()
                     val valorpreferences=sharedPreferences.getString("nombrealmacenado","")
