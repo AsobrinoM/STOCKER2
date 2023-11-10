@@ -15,16 +15,16 @@
     </string-array>
     <string-array name="reply_values">
         <item></item>
-        <item>ciudad Real</item>
-        <item>madrid</item>
-        <item>almagro</item>
-        <item>puertollano</item>
-        <item>pozuelo</item>
-        <item>daimiel</item>
-        <item>tomelloso</item>
-        <item>sevilla</item>
-        <item>cordoba</item>
-        <item>granada</item>
+        <item>Ciudad Real</item>
+        <item>Madrid</item>
+        <item>Almagro</item>
+        <item>Puertollano</item>
+        <item>Pozuelo</item>
+        <item>Daimiel</item>
+        <item>Tomelloso</item>
+        <item>Sevilla</item>
+        <item>Cordoba</item>
+        <item>Granada</item>
 
     </string-array>
 </resources>

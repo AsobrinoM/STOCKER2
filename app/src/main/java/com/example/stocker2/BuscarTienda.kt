@@ -1,5 +1,6 @@
 package com.example.stocker2
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,12 +30,19 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
     private val myCollection = db.collection("supermercados")
     private lateinit var btn_atras: ImageView
     private lateinit var adapter: SupermercadosAdapter
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     val manager = LinearLayoutManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXml()
+
+        // valores almacenados en preferencias para utilizarlos
+
         initRecicleView()
+        activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            initRecicleView()
+        }
         GlobalScope.launch {
             delay(1000)
             cargarDatosDesdeFirestore()
@@ -46,6 +55,13 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         }
 
     }
+    /*
+    private fun loadPref(){
+        val mySharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
+        val mensaje=mySharedPreferences.getString("ciudad","")
+
+    }
+    */
 
     private fun crearObjetosDelXml() {
         binding = ActivityBuscarTiendaBinding.inflate(layoutInflater)
@@ -62,6 +78,8 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         binding.recyclerMercados.adapter = adapter
         binding.recyclerMercados.addItemDecoration(decoration)
         adapter.setOnItemClickListener(this)
+        val mySharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
+        adapter.setFiltroCiudad(mySharedPreferences.getString("ciudad",""))
     }
     private fun cargarDatosDesdeFirestore() {
         myCollection
