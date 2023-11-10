@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main2, menu)
+        menuInflater.inflate(R.menu.menu_main3, menu)
         return true
     }
 
@@ -53,8 +53,11 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 true
             }
-
-
+            R.id.Preferencias->{
+               val intent=Intent(this,PREFERENCIAS::class.java)
+                startActivity(intent)
+                true
+            }
             else -> {super.onOptionsItemSelected(item)}
         }
 

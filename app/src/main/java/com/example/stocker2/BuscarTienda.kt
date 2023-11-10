@@ -68,7 +68,7 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         setContentView(binding.root)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main3, menu)
+        menuInflater.inflate(R.menu.menu_main2, menu)
         return true
     }
     private fun initRecicleView() {
@@ -80,6 +80,7 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         adapter.setOnItemClickListener(this)
         val mySharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
         adapter.setFiltroCiudad(mySharedPreferences.getString("ciudad",""))
+        adapter.setFiltroSucursal(mySharedPreferences.getString("sucursal",""))
     }
     private fun cargarDatosDesdeFirestore() {
         myCollection

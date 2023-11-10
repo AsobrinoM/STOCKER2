@@ -16,65 +16,88 @@
         android:id="@+id/etISC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="101dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="@string/txtCont"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/btnIniSec"
+        app:layout_constraintBottom_toTopOf="@+id/etOpcDir"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtintrNomb"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/txtintrNomb"
         android:layout_width="175dp"
         android:layout_height="120dp"
+        android:layout_marginStart="118dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="118dp"
+        android:layout_marginBottom="12dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/intNombEmp"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ETISN"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar"
-        app:layout_constraintVertical_bias="0.038" />
+        app:layout_constraintTop_toTopOf="@+id/appbar"
+        app:layout_constraintVertical_bias="0.983" />
 
     <EditText
         android:id="@+id/ETISN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="101dp"
+        android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="@string/txtNomb"
         android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/etISC"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtintrNomb" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+    <EditText
+        android:id="@+id/etOpcDir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="101dp"
+        android:layout_marginBottom="20dp"
+        android:ems="10"
+        android:hint="@string/direcci_n"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/btnIniSec"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnIniSec"
         android:layout_width="106dp"
         android:layout_height="61dp"
-        android:layout_marginTop="184dp"
+        android:layout_marginBottom="60dp"
         android:text="@string/btIniSesi"
+        app:layout_constraintBottom_toTopOf="@+id/BTNABREREG"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.213"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ETISN" />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/BTNABREREG"
         android:layout_width="160dp"
         android:layout_height="59dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="156dp"
+        android:layout_marginStart="125dp"
+        android:layout_marginEnd="126dp"
+        android:layout_marginBottom="112dp"
         android:onClick="abrirRegistrar"
         android:text="@string/btnRegEmp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etISC"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

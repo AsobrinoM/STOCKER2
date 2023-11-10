@@ -2,7 +2,7 @@
 
     <!-- Página de ayuda: https://developer.android.com/reference/androidx/preference/PreferenceFragmentCompat -->
 
-    <PreferenceCategory app:title="Decide si quieres limitar tus busquedas a tu ciudad">
+    <PreferenceCategory app:title="@string/ciupref">
 
         <ListPreference
             app:defaultValue="reply"
@@ -11,6 +11,24 @@
             app:key="ciudad"
             app:title="@string/txtLoc"
             app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+    <PreferenceCategory app:title="@string/supcont">
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/Sucursales"
+            app:entryValues="@array/SucursalesDisplay"
+            app:key="sucursal"
+            app:title="@string/pref_nmb"
+            app:useSimpleSummaryProvider="true" />
+</PreferenceCategory>
+    <PreferenceCategory app:title="@string/deseabl">
 
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/reply_entries"
+            app:entryValues="@array/reply_values"
+            app:key="boolgr"
+            app:title="Guardar Registros?"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 </PreferenceScreen>

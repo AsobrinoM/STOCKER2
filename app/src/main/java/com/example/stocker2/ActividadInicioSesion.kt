@@ -45,50 +45,60 @@ class ActividadInicioSesion: AppCompatActivity() {
     fun btInicioSesion() {
         val nombreEmpresa: String = binding.ETISN.text.toString()
         val contrasena: String = binding.etISC.text.toString()
+        val direccion: String = binding.etOpcDir.text.toString()
 
         if (nombreEmpresa.isEmpty() || contrasena.isEmpty()) {
-            resultadoOperacion("El nombre de la empresa y la contraseña no pueden estar vacíos")
+            resultadoOperacion("Ni el nombre de la empresa ni la contraseña pueden estar vacíos")
             return
         }
 
+        if (direccion.isEmpty()) {
+            resultadoOperacion("Necesitas ingresar una dirección para buscar la empresa")
+            return
+        }
+
+        verificarEmpresa(nombreEmpresa, contrasena, direccion)
+    }
+
+    private fun verificarEmpresa(nombreEmpresa: String, contrasena: String, direccion: String) {
         myCollection
             .whereEqualTo("nombre", nombreEmpresa)
             .whereEqualTo("Contraseña", contrasena)
+            .whereEqualTo("direccion", direccion)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
                     val documento = querySnapshot.documents[0]
                     val idAbuscar = documento["id"].toString()
-                    if (idAbuscar != null) {
-                        myCollection.document(idAbuscar).get()
-                            .addOnSuccessListener {
-                                val pagWeb:String=it.get("paginaweb").toString()
-                                val correo:String=it.get("correo").toString()
-                                val id:String=it.get("id").toString()
-                                resultadoOperacion("Bienvenido!")
-                                val intent= Intent(this,ActivityIngresoProductos::class.java)
-                                intent.putExtra("id",id)
-                                intent.putExtra("PaginaWeb",pagWeb)
-                                intent.putExtra("correo",correo)
-                                startActivity(intent)
-                                                    }
 
-                    } else {
-                        resultadoOperacion("Error: ID no válido para esta empresa.")
-                    }
+                    obtenerDatosEmpresa(idAbuscar)
                 } else {
-                    resultadoOperacion("Esta empresa no está registrada. ¿Quieres registrarte?")
-                    binding.BTNABREREG.visibility = View.VISIBLE
-                    binding.BTNABREREG.isEnabled = true
+                    resultadoOperacion("No se encontró ninguna empresa que coincida con los datos proporcionados.")
                 }
             }
     }
 
+    private fun obtenerDatosEmpresa(idEmpresa: String) {
+        myCollection.document(idEmpresa).get()
+            .addOnSuccessListener {
+                val pagWeb: String = it.get("paginaweb").toString()
+                val correo: String = it.get("correo").toString()
+                val id: String = it.get("id").toString()
+
+                resultadoOperacion("Bienvenido!")
+                val intent = Intent(this, ActivityIngresoProductos::class.java)
+                intent.putExtra("id", id)
+                intent.putExtra("PaginaWeb", pagWeb)
+                intent.putExtra("correo", correo)
+                startActivity(intent)
+            }
+    }
 
     private fun resultadoOperacion(mensaje:String){
+        /*
         binding.ETISN.setText("")
         binding.etISC.setText("")
-
+*/
         Toast.makeText(this,mensaje, Toast.LENGTH_LONG).show()
     }
     fun abrirRegistrar(view: View){
@@ -110,6 +120,3 @@ class ActividadInicioSesion: AppCompatActivity() {
     }
 
 }
-/**
- *
- */

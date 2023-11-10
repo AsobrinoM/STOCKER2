@@ -44,21 +44,21 @@ class ActividadRegistro: AppCompatActivity() {
         fun btguardarRegistro() {
             val nombreEmpresa = binding.ETNomEmpr.text.toString()
             val contrasena = binding.ETID.text.toString()
-
-            if (nombreEmpresa.isEmpty() || contrasena.isEmpty()) {
-                resultadoOperacion("El nombre de la empresa y la contraseña no pueden estar vacíos")
+            val direccion=binding.ETDir.text.toString()
+            if (nombreEmpresa.isEmpty() || contrasena.isEmpty()||direccion.isEmpty()) {
+                resultadoOperacion("El nombre de la empresa, la contraseña y la direccion son obligatorios")
                 return
             }
 
             // Realiza una consulta para buscar documentos con el mismo nombre y contraseña
             myCollection
                 .whereEqualTo("nombre", nombreEmpresa)
-                .whereEqualTo("Contraseña", contrasena)
+                .whereEqualTo("direccion", direccion)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
-                        // Ya existe un registro con el mismo nombre y contraseña
-                        resultadoOperacion("Este super con esta contraseña ya está registrada. Introduce otra")
+                        // Ya existe un registro con el mismo nombre y direccion
+                        resultadoOperacion("Este supermercado con esta dirección ya está registrado.")
                     } else {
                         myCollection
                             .orderBy("id", Query.Direction.DESCENDING)
@@ -79,6 +79,7 @@ class ActividadRegistro: AppCompatActivity() {
                                     "nombre" to nombreEmpresa,
                                     "Contraseña" to contrasena,
                                     "Ciudad" to binding.ETCiuEmpr.text.toString(),
+                                    "direccion" to direccion,
                                     "correo" to binding.ETTLF.text.toString(),
                                     "paginaweb" to binding.ETPWBEmp.text.toString()
                                 )

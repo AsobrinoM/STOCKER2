@@ -16,8 +16,11 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
 
     private lateinit var binding: ItemSupermercadoBinding
     private var supermercados: MutableList<SuperMercado> = mutableListOf()
+    private var filteredSupermercados: MutableList<SuperMercado> = mutableListOf()
     private var onItemClickListener: OnItemClickListener? = null
-    private var filtroCiudad:String=""
+    private var filtroCiudad: String = ""
+    private var filtroSucursal: String = ""
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuperMercadoViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ItemSupermercadoBinding.inflate(layoutInflater, parent, false)
@@ -25,34 +28,14 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
     }
 
     override fun onBindViewHolder(holder: SuperMercadoViewHolder, position: Int) {
-
-        val SuperMercado = supermercados[position]
-        if (filtroCiudad=="") {
-
-
-            Log.d("controlfiltro", "Aqui el filtro esta vacio")
-            holder.render(SuperMercado)
-        }
-        else{
-            val superciudad= SuperMercado.Ciudad.lowercase(Locale.ROOT)
-            Log.d("controlfiltro", "Aqui el filtro tiene $filtroCiudad")
-            if(superciudad==filtroCiudad){
-                Log.d("controlfiltro", "Aqui el filtro ha dejado pasar un super $SuperMercado")
-                    holder.render(SuperMercado)
-            }
-            else {
-                GlobalScope.launch(Dispatchers.Main) {
-                    supermercados.removeAt(position)
-                    notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, supermercados.size)
-                }
-            }
-        }
-        }
+        val SuperMercado = filteredSupermercados[position]
+        holder.render(SuperMercado)
+    }
 
     override fun getItemCount(): Int {
-        return supermercados.size
+        return filteredSupermercados.size
     }
+
 
     inner class SuperMercadoViewHolder(private val binding: ItemSupermercadoBinding):
         RecyclerView.ViewHolder(binding.root) {
@@ -68,7 +51,7 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
 
         fun render(Super: SuperMercado) {
             binding.textViewNombre.text = Super.nombre
-            binding.textViewCE.text = Super.correo
+            binding.textViewCE.text = Super.direccion
             binding.textViewCiudad.text = Super.Ciudad
             Glide.with(binding.imageViewProducto.context)
                 .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5GuV8OQCtWOlFIAOGTqpeKXuGUwFYHin5yA&usqp=CAU")
@@ -78,15 +61,40 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
 
     fun setSupermercados(supermercados: MutableList<SuperMercado>) {
         this.supermercados = supermercados
-        notifyDataSetChanged()
+        applyFilters()
     }
-    fun setFiltroCiudad(ciudad:String?) {
+
+    fun setFiltroCiudad(ciudad: String?) {
         if (ciudad != null) {
-            this.filtroCiudad= ciudad.lowercase(Locale.ROOT)
+            this.filtroCiudad = ciudad.lowercase(Locale.ROOT)
         }
-        else{
-            Log.d("controlfiltro", " ESTA EN NULL EL FILTRO DE CIUDAD,raro ")
+        applyFilters()
+    }
+
+    fun setFiltroSucursal(Sucursal: String?) {
+        if (Sucursal != null) {
+            this.filtroSucursal = Sucursal.lowercase(Locale.ROOT)
         }
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        filteredSupermercados.clear()
+
+        for (supermercado in supermercados) {
+            val superciudad = supermercado.Ciudad.lowercase(Locale.ROOT)
+            val superNombre = supermercado.nombre.lowercase(Locale.ROOT)
+
+            if ((filtroCiudad.isEmpty() || superciudad == filtroCiudad) &&
+                (filtroSucursal.isEmpty() || superNombre == filtroSucursal)
+            ) {
+                Log.d("controlfiltro", " El filtro es este: filtroCiudad: $filtroCiudad y filtroSucursal: $filtroSucursal")
+                Log.d("controlfiltro", " Superañadido:$supermercado")
+                filteredSupermercados.add(supermercado)
+            }
+        }
+
+        notifyDataSetChanged()
     }
 
     interface OnItemClickListener {

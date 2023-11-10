@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stocker2</string>
+    <string name="app_name">Stocker</string>
     <string name="btnRegEmp">REGISTRARSE</string>
     <string name="btnExit">Volver</string>
     <string name="LbIntReg">Introduzca los datos de su empresa</string>
@@ -22,20 +22,25 @@
     <string name="strllamar">Llamar</string>
     <string name="strmail">Mail</string>
     <string name="strubi">Ubicación</string>
-    <string name="strAcDe">Acerca de...</string>
+    <string name="strAcDe">Acerca de…</string>
     <string name="strAccWeb">Acceso a web</string>
     <string name="MiNombre">Antonio Sobrino Martín</string>
     <string name="appname">STOCKER</string>
     <string name="tlf">Contacto</string>
-    <string name="Web">Página Web</string>
+    <string name="Web">Página Web:(Opcional)</string>
     <string name="tus_productos">Tus productos:</string>
     <string name="verMs">Ver Más</string>
     <string name="estos_son_nuestros_productos_disponibles">Estos son nuestros productos disponibles:</string>
-    <string name="correo_electr_nico">Correo Electrónico:</string>
+    <string name="correo_electr_nico">Email:(Opcional)</string>
     <string name="registrarse">Registrarse</string>
     <string name="mandar_email">Mandar Email</string>
     <string name="que_es_stocker">¿Que es Stocker?</string>
     <string name="reply_title" />
+    <string name="pref_nmb">Nombre de Sucursal:</string>
+    <string name="direcci_n">Dirección:</string>
+    <string name="deseabl">Solo para empresas: Desea que sus datos se almacenen para no tener que iniciar sesion todo el rato?</string>
+    <string name="supcont">Quieres que solo te salgan supermercados de una sucursal concreta?</string>
+    <string name="ciupref">Decide si quieres limitar tus busquedas a tu ciudad</string>
 
 
 </resources>

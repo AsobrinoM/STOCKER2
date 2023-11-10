@@ -27,4 +27,30 @@
         <item>Granada</item>
 
     </string-array>
+    <string-array name="Sucursales">
+        <item></item>
+        <item>Mercadona</item>
+        <item>Dia</item>
+        <item>Lidl</item>
+        <item>Carrefour</item>
+        <item>Eroski</item>
+        <item>Consum</item>
+    </string-array>
+    <string-array name="SucursalesDisplay">
+        <item></item>
+        <item>Mercadona</item>
+        <item>Dia</item>
+        <item>Lidl</item>
+        <item>Carrefour</item>
+        <item>Eroski</item>
+        <item>Consum</item>
+    </string-array>
+    <string-array name="Guardar">
+      <item>no</item>
+      <item>si</item>
+    </string-array>
+    <string-array name="GuardarDisplay">
+     <item>no</item>
+        <item>si</item>
+    </string-array>
 </resources>
