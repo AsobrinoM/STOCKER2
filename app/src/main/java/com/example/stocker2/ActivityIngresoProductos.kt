@@ -1,6 +1,7 @@
 package com.example.stocker2
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,22 +21,33 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
+/**
+ * [ActivityIngresoProductos] es una actividad que permite a los usuarios ingresar y eliminar productos y
+ * gestionar su cantidad en un supermercado específico.
+ */
 class ActivityIngresoProductos : AppCompatActivity() {
+
     private lateinit var binding: ActivityIngresoProductosBinding
-    private lateinit var btn_atras:ImageView
-    private val db= FirebaseFirestore.getInstance()
-    private val myCollection=db.collection("Productos")
+    private lateinit var btn_atras: ImageView
+    private val db = FirebaseFirestore.getInstance()
+    private val myCollection = db.collection("Productos")
+
+    /**
+     * Método llamado cuando se crea la actividad.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       crearObjetosDelXml()
+        // Inicialización de los elementos del diseño XML
+        crearObjetosDelXml()
         setSupportActionBar(binding.appbar.toolb)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        val objIntent: Intent =intent
-        var id=objIntent.getStringExtra("id")
 
-        binding.btnGuardarProducto.setOnClickListener{
+        // Obtiene el ID del supermercado desde el intent
+        val objIntent: Intent = intent
+        var id = objIntent.getStringExtra("id")
 
+        // Configuración del botón para guardar productos
+        binding.btnGuardarProducto.setOnClickListener {
             if (id != null) {
                 guardarRegistro(id)
                 GlobalScope.launch {
@@ -46,99 +58,107 @@ class ActivityIngresoProductos : AppCompatActivity() {
                 }
             }
         }
+
+        // Lista el documento al iniciar la actividad
         if (id != null) {
             listarDocumento(id)
         }
-        btn_atras=findViewById(R.id.btn_atras)
-        btn_atras.setOnClickListener{
+
+        // Configuración del botón de retroceso
+        btn_atras = findViewById(R.id.btn_atras)
+        btn_atras.setOnClickListener {
             finish()
         }
     }
 
-
-
-    private fun crearObjetosDelXml(){
-        binding=ActivityIngresoProductosBinding.inflate(layoutInflater)
+    /**
+     * Método que inicializa la vinculación con los elementos de diseño XML.
+     */
+    private fun crearObjetosDelXml() {
+        binding = ActivityIngresoProductosBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
+    /**
+     * Método llamado para crear el menú de opciones en la barra de acción.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main_act1, menu)
         return true
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val objIntent: Intent =intent
-        var PagWeb=objIntent.getStringExtra("PaginaWeb")
-        var email=objIntent.getStringExtra("correo")
-        return when (item.itemId) {
-                R.id.Web->{
-                    if (PagWeb != null) {
-                        abrirPagina(PagWeb)
-                    }
-                    true
-                }
-            R.id.Contactaremail->{
-                    if (email != null) {
-                        mandarCorreo(email)
-                    }
 
+    /**
+     * Método llamado cuando se hace clic en un elemento del menú de opciones.
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val objIntent: Intent = intent
+        var PagWeb = objIntent.getStringExtra("PaginaWeb")
+        var email = objIntent.getStringExtra("correo")
+        return when (item.itemId) {
+            R.id.Web -> {
+                if (PagWeb != null) {
+                    abrirPagina(PagWeb)
+                }
                 true
             }
-            R.id.AcDe ->{
-                val intent= Intent(this,AcercaDeActivity::class.java)
+            R.id.Contactaremail -> {
+                if (email != null) {
+                    mandarCorreo(email)
+                }
+                true
+            }
+            R.id.AcDe -> {
+                val intent = Intent(this, AcercaDeActivity::class.java)
                 startActivity(intent)
                 true
             }
-
-
-            else -> {super.onOptionsItemSelected(item)}
+            else -> super.onOptionsItemSelected(item)
         }
+    }
 
-        }
-
-
-
-    private fun guardarRegistro(id:String){
+    /**
+     * Método que guarda el nuevo registro de producto en Firebase Firestore.
+     */
+    private fun guardarRegistro(id: String) {
         if (binding.etNombProd.text.toString().isEmpty() || binding.etCantProd.text.toString().isEmpty()) {
-            resultadoOperacion("ni nombre del produco ni la cantidad pueden estar vacíos")
+            resultadoOperacion("Ni el nombre del producto ni la cantidad pueden estar vacíos")
             listarDocumento(id)
             return
         }
-
-           myCollection.document(id).get()
+        var producto = binding.etNombProd.text.toString().trim()
+        myCollection.document(id).get()
             .addOnSuccessListener {
-                    if (it.contains(binding.etNombProd.text.toString())){
-                        myCollection.document(id).set(
-                            hashMapOf(
-                                binding.etNombProd.text.toString() to (binding.etCantProd.text.toString().toInt()+it.get(binding.etNombProd.text.toString()).toString().toInt())
-                            ), SetOptions.merge())
-                            .addOnSuccessListener {
-                                eliminarSieso(id,binding.etNombProd.text.toString())
-
-                            }
-                            .addOnFailureListener{
-                                    e->
-                                Log.e("Firebase Update Error",e.message,e)
-                            }
-                    }
-                    else{
-                        myCollection.document(id).set(
-                            hashMapOf(
-                                binding.etNombProd.text.toString() to (binding.etCantProd.text.toString().toInt())
-                            ), SetOptions.merge())
-                            .addOnSuccessListener {
-                                resultadoOperacion("El producto se ha registrado correctamente")
-                            }
-                            .addOnFailureListener{
-                                    e->
-                                Log.e("Firebase Update Error",e.message,e)
-                    }
+                if (it.contains(producto)) {
+                    myCollection.document(id).set(
+                        hashMapOf(
+                            producto to (binding.etCantProd.text.toString().toInt() + it.get(producto).toString().toInt())
+                        ), SetOptions.merge()
+                    )
+                        .addOnSuccessListener {
+                            eliminarSieso(id, producto)
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("Firebase Update Error", e.message, e)
+                        }
+                } else {
+                    myCollection.document(id).set(
+                        hashMapOf(
+                            producto to (binding.etCantProd.text.toString().toInt())
+                        ), SetOptions.merge()
+                    )
+                        .addOnSuccessListener {
+                            resultadoOperacion("El producto se ha registrado correctamente")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("Firebase Update Error", e.message, e)
+                        }
                 }
-
+            }
     }
 
-
-    }
+    /**
+     * Método que elimina un producto si su cantidad es igual o menor a 0.
+     */
     private fun eliminarSieso(id: String, nombreProducto: String) {
         myCollection.document(id).get()
             .addOnSuccessListener { documentSnapshot ->
@@ -158,14 +178,16 @@ class ActivityIngresoProductos : AppCompatActivity() {
                             .addOnFailureListener { e ->
                                 Log.e("Firebase Delete Error", e.message, e)
                             }
-                    }
-                    else{
+                    } else {
                         resultadoOperacion("El producto se ha editado correctamente")
                     }
                 }
-
             }
     }
+
+    /**
+     * Método que lista los productos en un documento específico y los muestra en la interfaz de usuario.
+     */
     private fun listarDocumento(nombreDocumento: String) {
         myCollection
             .document(nombreDocumento)
@@ -182,37 +204,44 @@ class ActivityIngresoProductos : AppCompatActivity() {
 
                     val textView = TextView(this)
                     textView.text = "$key: $value"
+                    textView.setTextColor(Color.parseColor("#B68D8D"))
                     linearLayoutContainer.addView(textView)
                 }
             }
     }
-    private fun resultadoOperacion(mensaje:String){
+
+    /**
+     * Método que muestra un mensaje de resultado de la operación.
+     */
+    private fun resultadoOperacion(mensaje: String) {
         binding.etCantProd.setText("")
         binding.etNombProd.setText("")
-        Toast.makeText(this,mensaje, Toast.LENGTH_LONG).show()
-
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
     }
-    fun abrirPagina(PagWeb:String) {
+
+    /**
+     * Método que abre una página web en un navegador externo.
+     */
+    private fun abrirPagina(PagWeb: String) {
         // Para ésta, el ACTION_VIEW va a buscar una página que abrir
-        if (PagWeb.isEmpty()||PagWeb.isBlank()){
-            Toast.makeText(this,"No intoduciste ninguna página web al registrarte",Toast.LENGTH_LONG).show()
+        if (PagWeb.isEmpty() || PagWeb.isBlank()) {
+            Toast.makeText(this, "No introdujiste ninguna página web al registrarte", Toast.LENGTH_LONG).show()
+        } else {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PagWeb)))
         }
-        else{
+    }
 
-
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PagWeb)))
-    }}
-    fun mandarCorreo(email:String) {
-
+    /**
+     * Método que abre una aplicación de correo para enviar un correo electrónico.
+     */
+    private fun mandarCorreo(email: String) {
         startActivity(
             Intent(Intent.ACTION_VIEW).apply {
-                type="text/plain"
-                putExtra(Intent.EXTRA_SUBJECT,"Contacto a empresa")
-                putExtra(Intent.EXTRA_TEXT,"")
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, "Contacto a empresa")
+                putExtra(Intent.EXTRA_TEXT, "")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
-
             }
         )
     }
-
 }

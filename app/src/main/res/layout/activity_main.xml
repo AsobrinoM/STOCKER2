@@ -5,57 +5,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <include
         android:id="@+id/appbar"
         layout="@layout/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/ButtonBT"
-        android:layout_width="117dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="147dp"
+        android:layout_width="110dp"
+        android:layout_height="102dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="184dp"
+        android:backgroundTint="#423131"
         android:onClick="abrirBuscarTienda"
         android:text="@string/BotStrTienda"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.462"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BotonBP"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.626"
+        app:layout_constraintStart_toEndOf="@+id/BotonBP" />
 
     <Button
         android:id="@+id/BotonBP"
-        android:layout_width="128dp"
-        android:layout_height="78dp"
-        android:layout_marginTop="144dp"
+        android:layout_width="113dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginBottom="184dp"
+        android:backgroundTint="#686333"
         android:onClick="abrirBuscarProducto"
         android:text="@string/botStrProd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnRegistroEmpresa"
         android:layout_width="179dp"
         android:layout_height="62dp"
+        android:backgroundTint="#FFFFFF"
         android:onClick="abrirRegistrar"
         android:text="@string/btnRegEmp"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/lbEmpReg"
-        android:layout_width="134dp"
-        android:layout_height="27dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginBottom="60dp"
-        android:fontFamily="sans-serif-black"
+        android:layout_width="199dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="52dp"
+        android:fontFamily="casual"
         android:text="@string/Lbregistro"
         android:textColor="#207BEA"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -64,16 +69,22 @@
         android:layout_width="175dp"
         android:layout_height="59dp"
         android:layout_marginBottom="16dp"
+        android:backgroundTint="#000000"
         android:onClick="abrirInicioSec"
         android:text="@string/btIniSesi"
         app:layout_constraintBottom_toTopOf="@+id/btnRegistroEmpresa"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
-
-
-
-
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="242dp"
+        android:layout_height="287dp"
+        android:layout_marginBottom="348dp"
+        app:layout_constraintBottom_toBottomOf="@+id/appbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/st" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

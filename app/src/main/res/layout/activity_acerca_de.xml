@@ -16,15 +16,13 @@
         android:id="@+id/tvSt"
         android:layout_width="356dp"
         android:layout_height="48dp"
-        android:layout_marginStart="4dp"
         android:layout_marginTop="76dp"
-        android:layout_marginEnd="3dp"
         android:fontFamily="sans-serif-smallcaps"
         android:text="@string/que_es_stocker"
         android:textAlignment="center"
+        android:textColor="#B68D8D"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

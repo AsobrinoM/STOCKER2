@@ -7,8 +7,9 @@
 
     <ImageView
         android:id="@+id/imageViewProducto"
-        android:layout_width="88dp"
-        android:layout_height="100dp"
+        android:layout_width="106dp"
+        android:layout_height="105dp"
+        android:layout_marginStart="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,6 +24,7 @@
         android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif-black"
         android:text="Nombre"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/textViewCE"
         app:layout_constraintStart_toEndOf="@+id/imageViewProducto"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,6 +38,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="3dp"
         android:text="Ciudad"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/imageViewProducto"
@@ -50,9 +53,12 @@
         android:layout_marginEnd="73dp"
         android:layout_marginBottom="6dp"
         android:text="Aquivieneeltexto"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toEndOf="@+id/imageViewProducto"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCiudad" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewCiudad"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

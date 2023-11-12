@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +23,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListener {
+class BuscarTienda : AppCompatActivity(), SupermercadosAdapter.OnItemClickListener {
     private lateinit var binding: ActivityBuscarTiendaBinding
     private val db = FirebaseFirestore.getInstance()
     private val myCollection = db.collection("supermercados")
@@ -35,39 +34,53 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Inicialización de la vista y de los elementos
         crearObjetosDelXml()
 
-        // valores almacenados en preferencias para utilizarlos
-
+        // Configuración del RecyclerView
         initRecicleView()
+
+        // Configuración del lanzador de resultados de actividad para actualizar la vista después de ciertas acciones
         activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             initRecicleView()
         }
+
+        // Retraso para cargar datos después de un segundo
         GlobalScope.launch {
             delay(1000)
             cargarDatosDesdeFirestore()
         }
+
+        // Configuración de la barra de acción
         setSupportActionBar(binding.appbar.toolb)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        btn_atras=findViewById(R.id.btn_atras)
-        btn_atras.setOnClickListener{
+
+        // Configuración del botón de retroceso
+        btn_atras = findViewById(R.id.btn_atras)
+        btn_atras.setOnClickListener {
             finish()
         }
     }
-    /*
-    private fun loadPref(){
-        val mySharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
-        val mensaje=mySharedPreferences.getString("ciudad","")
-    }
-    */
+
+    /**
+     * Método que crea objetos a partir del diseño XML.
+     */
     private fun crearObjetosDelXml() {
         binding = ActivityBuscarTiendaBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+    /**
+     * Método que crea el menú de opciones en la barra de acción.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main2, menu)
         return true
     }
+
+    /**
+     * Método que inicializa el RecyclerView y el adaptador.
+     */
     private fun initRecicleView() {
         val decoration = DividerItemDecoration(this, manager.orientation)
         binding.recyclerMercados.layoutManager = manager
@@ -75,10 +88,17 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
         binding.recyclerMercados.adapter = adapter
         binding.recyclerMercados.addItemDecoration(decoration)
         adapter.setOnItemClickListener(this)
-        val mySharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
-        adapter.setFiltroCiudad(mySharedPreferences.getString("ciudad",""))
-        adapter.setFiltroSucursal(mySharedPreferences.getString("sucursal",""))
+
+        // Obtener valores de preferencias para filtrar resultados
+        val mySharedPreferences =
+            getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE)
+        adapter.setFiltroCiudad(mySharedPreferences.getString("ciudad", ""))
+        adapter.setFiltroSucursal(mySharedPreferences.getString("sucursal", ""))
     }
+
+    /**
+     * Método que carga datos desde Firestore y actualiza el adaptador del RecyclerView.
+     */
     private fun cargarDatosDesdeFirestore() {
         myCollection
             .get()
@@ -97,32 +117,36 @@ class BuscarTienda : AppCompatActivity(),SupermercadosAdapter.OnItemClickListene
                 Log.e("FirestoreData", "Error al obtener datos de Firestore: $e")
             }
     }
+
+    /**
+     * Método llamado cuando se hace clic en un elemento del RecyclerView.
+     */
     override fun onItemClick(supermercado: SuperMercado) {
-        val intent= Intent(this,ProductosMercado::class.java)
-        intent.putExtra("NombreEmpresa",supermercado.nombre)
-        intent.putExtra("id",supermercado.id.toString())
+        val intent = Intent(this, ProductosMercado::class.java)
+        intent.putExtra("NombreEmpresa", supermercado.nombre)
+        intent.putExtra("id", supermercado.id.toString())
         startActivity(intent)
     }
+
+    /**
+     * Método llamado cuando se selecciona un elemento del menú de opciones.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.AcDe ->{
-                val intent= Intent(this,AcercaDeActivity::class.java)
+            R.id.AcDe -> {
+                val intent = Intent(this, AcercaDeActivity::class.java)
                 startActivity(intent)
                 true
             }
-            R.id.Preferencias ->{
-                val intent= Intent(this,PREFERENCIAS::class.java)
+            R.id.Preferencias -> {
+                val intent = Intent(this, PREFERENCIAS::class.java)
                 startActivity(intent)
                 true
             }
-
-            else -> {super.onOptionsItemSelected(item)}
+            else -> super.onOptionsItemSelected(item)
         }
-
     }
-
 }
-
 
 
 

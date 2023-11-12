@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <include
+        android:id="@+id/appbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/ButtonBT"
+        android:layout_width="102dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="204dp"
+        android:layout_marginBottom="156dp"
+        android:backgroundTint="#423131"
+        android:onClick="abrirBuscarTienda"
+        android:text="@string/BotStrTienda"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/appbar" />
+
+    <Button
+        android:id="@+id/BotonBP"
+        android:layout_width="113dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="156dp"
+        android:backgroundTint="#686333"
+        android:onClick="abrirBuscarProducto"
+        android:text="@string/botStrProd"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ButtonBT" />
+
+    <Button
+        android:id="@+id/btnRegistroEmpresa"
+        android:layout_width="176dp"
+        android:layout_height="62dp"
+        android:backgroundTint="#FFFFFF"
+        android:onClick="abrirRegistrar"
+        android:text="@string/btnRegEmp"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/lbEmpReg"
+        android:layout_width="199dp"
+        android:layout_height="35dp"
+        android:fontFamily="casual"
+        android:text="@string/Lbregistro"
+        android:textColor="#207BEA"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnIniSesi"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnIniSesi"
+        android:layout_width="175dp"
+        android:layout_height="59dp"
+        android:backgroundTint="#000000"
+        android:onClick="abrirInicioSec"
+        android:text="@string/btIniSesi"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegistroEmpresa"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="248dp"
+        android:layout_height="254dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/appbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/st" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

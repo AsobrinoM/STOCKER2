@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#4B0000"
     tools:context=".ActivityIngresoProductos">
 
     <include
         android:id="@+id/appbar"
         layout="@layout/toolbar"
+        android:layout_width="405dp"
+        android:layout_height="59dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -17,9 +21,8 @@
         android:id="@+id/btnGuardarProducto"
         android:layout_width="189dp"
         android:layout_height="57dp"
-        android:layout_marginStart="111dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="111dp"
+        android:layout_marginTop="36dp"
+        android:backgroundTint="#000000"
         android:text="@string/registrar_producto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,12 +32,12 @@
         android:id="@+id/etNombProd"
         android:layout_width="285dp"
         android:layout_height="50dp"
-        android:layout_marginStart="63dp"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="63dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="@string/txtNomb"
         android:inputType="text"
+        android:textColor="#E89B9B"
+        android:textColorHint="#E89B9B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -43,12 +46,12 @@
         android:id="@+id/etCantProd"
         android:layout_width="285dp"
         android:layout_height="50dp"
-        android:layout_marginStart="63dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="63dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/cantidad"
         android:inputType="text"
+        android:textColor="#E89B9B"
+        android:textColorHint="#E89B9B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNombProd" />
@@ -57,19 +60,20 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="132dp"
         android:text="@string/tvregProd"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar" />
+        android:textColor="#E89B9B"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-3dp" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="66dp"
+        android:layout_marginTop="20dp"
         android:text="@string/tus_productos"
+        android:textColor="#E89B9B"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnGuardarProducto" />
@@ -78,9 +82,7 @@
         android:id="@+id/SV1"
         android:layout_width="391dp"
         android:layout_height="264dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">

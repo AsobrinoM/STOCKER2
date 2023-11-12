@@ -14,53 +14,105 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.stocker2.databinding.LayoutInicioSesionBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ActividadInicioSesion: AppCompatActivity() {
+/**
+ * [ActividadInicioSesion] es una actividad que permite a los usuarios iniciar sesión.
+ */
+class ActividadInicioSesion : AppCompatActivity() {
+
     private lateinit var sharedPreferences: SharedPreferences
     lateinit var binding: LayoutInicioSesionBinding
-    private val db= FirebaseFirestore.getInstance()
-    private val myCollection=db.collection("supermercados")
+    private val db = FirebaseFirestore.getInstance()
+    private val myCollection = db.collection("supermercados")
     private lateinit var btn_atras: ImageView
-    private var bolguardo=false
+    private var bolguardo = false
+
+    /**
+     * Método llamado cuando se crea la actividad.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Inicialización de los elementos del diseño XML
         crearObjetosDelXml()
 
-         sharedPreferences=getSharedPreferences(packageName+"_preferences", Context.MODE_PRIVATE)
-        var siono=sharedPreferences.getString("boolgr","no")
+        // Obtención de las preferencias compartidas
+        sharedPreferences = getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE)
+        val siono = sharedPreferences.getString("boolgr", "no")
 
-        if(siono=="si"){
-            bolguardo=true
-            Log.d("controlis", " la preferencia se ha  actualizado")
+        if (siono == "si") {
+            bolguardo = true
+            Log.d("controlis", " la preferencia se ha actualizado")
+        } else {
+            // Restablecer preferencias si no se encontró "boolgr" o es "no"
+            val editor = sharedPreferences.edit()
+            editor.putString("nombrealmacenado", "")
+            editor.putString("contrasenaalmacenada", "")
+            editor.putString("direccionalmacenada", "")
+            editor.apply()
         }
-        if (bolguardo){
-            val txtnom=sharedPreferences.getString("nombrealmacenado","")
-            val txtcon=sharedPreferences.getString("contrasenaalmacenada","")
-            val txtdir=sharedPreferences.getString("direccionalmacenada","")
+
+        // Actualizar campos de entrada con valores guardados si "boolgr" es "si"
+        if (bolguardo) {
+            val txtnom = sharedPreferences.getString("nombrealmacenado", "")
+            val txtcon = sharedPreferences.getString("contrasenaalmacenada", "")
+            val txtdir = sharedPreferences.getString("direccionalmacenada", "")
             binding.ETISN.setText(txtnom)
             binding.etISC.setText(txtcon)
             binding.etOpcDir.setText(txtdir)
-            Log.d("controlis", " se supone que se han actualizado los registros asi: nombre= $txtnom , contaseña= $txtcon , direccion=$txtdir")
+            Log.d("controlis", " se supone que se han actualizado los registros así: nombre= $txtnom, contraseña= $txtcon, dirección= $txtdir")
         }
-        binding.BTNABREREG.visibility=View.INVISIBLE
-        binding.BTNABREREG.isEnabled=false
+
+        // Configuración de visibilidad e interactividad de un botón
+        binding.BTNABREREG.visibility = View.INVISIBLE
+        binding.BTNABREREG.isEnabled = false
+
+        // Configuración de un listener para el botón de inicio de sesión
         binding.btnIniSec.setOnClickListener {
             btInicioSesion()
         }
-            setSupportActionBar(binding.appbar.toolb)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-            btn_atras=findViewById(R.id.btn_atras)
-            btn_atras.setOnClickListener{
-                finish()
-            }
+
+        // Configuración de la barra de acción y del botón de retroceso
+        setSupportActionBar(binding.appbar.toolb)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        btn_atras = findViewById(R.id.btn_atras)
+        btn_atras.setOnClickListener {
+            finish()
+        }
     }
-    private fun crearObjetosDelXml(){
-        binding=LayoutInicioSesionBinding.inflate(layoutInflater)
+
+    /**
+     * Método que inicializa la vinculación con los elementos de diseño XML.
+     */
+    private fun crearObjetosDelXml() {
+        binding = LayoutInicioSesionBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+    /**
+     * Método llamado para crear el menú de opciones en la barra de acción.
+     */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main2, menu)
         return true
     }
+
+    /**
+     * Método llamado cuando se hace clic en un elemento del menú de opciones.
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.AcDe -> {
+                // Abrir la actividad AcercaDeActivity
+                val intent = Intent(this, AcercaDeActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * Método llamado al hacer clic en el botón de inicio de sesión.
+     */
     fun btInicioSesion() {
         val nombreEmpresa: String = binding.ETISN.text.toString()
         val contrasena: String = binding.etISC.text.toString()
@@ -78,6 +130,9 @@ class ActividadInicioSesion: AppCompatActivity() {
         verificarEmpresa(nombreEmpresa, contrasena, direccion)
     }
 
+    /**
+     * Método que verifica la existencia de la empresa en Firebase Firestore.
+     */
     private fun verificarEmpresa(nombreEmpresa: String, contrasena: String, direccion: String) {
         myCollection
             .whereEqualTo("nombre", nombreEmpresa)
@@ -86,22 +141,28 @@ class ActividadInicioSesion: AppCompatActivity() {
             .get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
+                    // Si se encuentra la empresa, obtener su información y redirigir al usuario
                     val documento = querySnapshot.documents[0]
                     val idAbuscar = documento["id"].toString()
                     val editor = sharedPreferences.edit()
-                    editor.putString("nombrealmacenado",nombreEmpresa)
-                    editor.putString("contrasenaalmacenada",contrasena)
-                    editor.putString("direccionalmacenada",direccion)
-                        editor.apply()
-                    val valorpreferences=sharedPreferences.getString("nombrealmacenado","")
+                    editor.putString("nombrealmacenado", nombreEmpresa)
+                    editor.putString("contrasenaalmacenada", contrasena)
+                    editor.putString("direccionalmacenada", direccion)
+                    editor.apply()
+
+                    val valorpreferences = sharedPreferences.getString("nombrealmacenado", "")
                     Log.d("controlis", " se presupone que este es el nombre almacenado $valorpreferences  ")
                     obtenerDatosEmpresa(idAbuscar)
                 } else {
+                    // Si no se encuentra la empresa, mostrar mensaje de error
                     resultadoOperacion("No se encontró ninguna empresa que coincida con los datos proporcionados.")
                 }
             }
     }
 
+    /**
+     * Método que obtiene información adicional de la empresa y redirige al usuario.
+     */
     private fun obtenerDatosEmpresa(idEmpresa: String) {
         myCollection.document(idEmpresa).get()
             .addOnSuccessListener {
@@ -109,7 +170,7 @@ class ActividadInicioSesion: AppCompatActivity() {
                 val correo: String = it.get("correo").toString()
                 val id: String = it.get("id").toString()
 
-                resultadoOperacion("Bienvenido!")
+                resultadoOperacion("¡Bienvenido!")
                 val intent = Intent(this, ActivityIngresoProductos::class.java)
                 intent.putExtra("id", id)
                 intent.putExtra("PaginaWeb", pagWeb)
@@ -118,29 +179,22 @@ class ActividadInicioSesion: AppCompatActivity() {
             }
     }
 
-    private fun resultadoOperacion(mensaje:String){
-        /*
+    /**
+     * Método que muestra un mensaje de resultado de la operación.
+     */
+    private fun resultadoOperacion(mensaje: String) {
+        // Limpiar campos de entrada
         binding.ETISN.setText("")
         binding.etISC.setText("")
-*/
-        Toast.makeText(this,mensaje, Toast.LENGTH_LONG).show()
+        binding.etOpcDir.setText("")
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
     }
-    fun abrirRegistrar(view: View){
-        val intent= Intent(this,ActividadRegistro::class.java)
+
+    /**
+     * Método llamado al hacer clic en el botón "Registrarse".
+     */
+    fun abrirRegistrar(view: View) {
+        val intent = Intent(this, ActividadRegistro::class.java)
         startActivity(intent)
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.AcDe ->{
-                val intent= Intent(this,AcercaDeActivity::class.java)
-                startActivity(intent)
-                true
-            }
-
-
-            else -> {super.onOptionsItemSelected(item)}
-        }
-
-    }
-
 }
