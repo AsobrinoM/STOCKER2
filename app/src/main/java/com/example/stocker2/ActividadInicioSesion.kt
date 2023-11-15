@@ -61,7 +61,7 @@ class ActividadInicioSesion : AppCompatActivity() {
             Log.d("controlis", " se supone que se han actualizado los registros así: nombre= $txtnom, contraseña= $txtcon, dirección= $txtdir")
         }
 
-        // Configuración de visibilidad e interactividad de un botón
+        // Configuración de visibilidad e interactividad del boton de registro
         binding.BTNABREREG.visibility = View.INVISIBLE
         binding.BTNABREREG.isEnabled = false
 
@@ -155,7 +155,9 @@ class ActividadInicioSesion : AppCompatActivity() {
                     obtenerDatosEmpresa(idAbuscar)
                 } else {
                     // Si no se encuentra la empresa, mostrar mensaje de error
-                    resultadoOperacion("No se encontró ninguna empresa que coincida con los datos proporcionados.")
+                    binding.BTNABREREG.visibility = View.VISIBLE
+                    binding.BTNABREREG.isEnabled = true
+                    resultadoOperacion("No se encontró ninguna empresa con esos datos, deseas registrarte?")
                 }
             }
     }
@@ -183,11 +185,12 @@ class ActividadInicioSesion : AppCompatActivity() {
      * Método que muestra un mensaje de resultado de la operación.
      */
     private fun resultadoOperacion(mensaje: String) {
-        // Limpiar campos de entrada
-        binding.ETISN.setText("")
-        binding.etISC.setText("")
-        binding.etOpcDir.setText("")
-        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
+        if(!bolguardo) {
+            binding.ETISN.setText("")
+            binding.etISC.setText("")
+            binding.etOpcDir.setText("")
+        }
+            Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
     }
 
     /**

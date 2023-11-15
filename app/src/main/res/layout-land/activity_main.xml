@@ -18,25 +18,23 @@
         android:id="@+id/ButtonBT"
         android:layout_width="102dp"
         android:layout_height="100dp"
-        android:layout_marginEnd="204dp"
         android:layout_marginBottom="156dp"
         android:backgroundTint="#423131"
         android:onClick="abrirBuscarTienda"
         android:text="@string/BotStrTienda"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/appbar" />
+        app:layout_constraintStart_toEndOf="@+id/BotonBP" />
 
     <Button
         android:id="@+id/BotonBP"
         android:layout_width="113dp"
         android:layout_height="100dp"
-        android:layout_marginEnd="3dp"
         android:layout_marginBottom="156dp"
         android:backgroundTint="#686333"
         android:onClick="abrirBuscarProducto"
         android:text="@string/botStrProd"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ButtonBT" />
+        app:layout_constraintStart_toEndOf="@+id/imageView2" />
 
     <Button
         android:id="@+id/btnRegistroEmpresa"
@@ -74,8 +72,8 @@
         android:id="@+id/imageView2"
         android:layout_width="248dp"
         android:layout_height="254dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/appbar"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/st" />

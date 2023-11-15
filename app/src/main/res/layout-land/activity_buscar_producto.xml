@@ -44,8 +44,9 @@
         android:id="@+id/SV3"
         android:layout_width="504dp"
         android:layout_height="323dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toEndOf="@+id/textfiltro"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:id="@+id/linearLayoutContaine"

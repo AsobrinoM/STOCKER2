@@ -17,32 +17,27 @@
         android:layout_width="356dp"
         android:layout_height="48dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="48dp"
         android:layout_marginEnd="3dp"
         android:fontFamily="sans-serif-smallcaps"
         android:text="@string/que_es_stocker"
         android:textAlignment="center"
         android:textColor="#B68D8D"
         android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/SVAD"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
         android:id="@+id/SVAD"
-        android:layout_width="522dp"
-        android:layout_height="292dp"
+        android:layout_width="498dp"
+        android:layout_height="247dp"
         android:layout_marginStart="13dp"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="13dp"
-        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSt"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:id="@+id/LinearLayout"

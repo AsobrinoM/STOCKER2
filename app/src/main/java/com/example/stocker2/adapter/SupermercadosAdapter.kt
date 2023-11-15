@@ -69,7 +69,7 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
     // Establece la lista de supermercados y aplica los filtros
     fun setSupermercados(supermercados: MutableList<SuperMercado>) {
         this.supermercados = supermercados
-        applyFilters()
+        applyFiltros()
     }
 
     // Establece el filtro de ciudad y aplica los filtros
@@ -77,7 +77,7 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
         if (ciudad != null) {
             this.filtroCiudad = ciudad.lowercase(Locale.ROOT)
         }
-        applyFilters()
+        applyFiltros()
     }
 
     // Establece el filtro de sucursal y aplica los filtros
@@ -85,11 +85,11 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
         if (Sucursal != null) {
             this.filtroSucursal = Sucursal.lowercase(Locale.ROOT)
         }
-        applyFilters()
+        applyFiltros()
     }
 
     // Aplica los filtros a la lista de supermercados
-    private fun applyFilters() {
+    private fun applyFiltros() {
         filteredSupermercados.clear()
 
         for (supermercado in supermercados) {

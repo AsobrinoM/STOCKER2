@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
@@ -101,6 +102,7 @@ class ProductosMercado : AppCompatActivity() {
                         .get()
                         .addOnSuccessListener { snapshot ->
                             val email = snapshot.getString("correo")
+                            Log.d("FirestoreData", "correo: $email")
                             if (!email.isNullOrBlank()) {
                                 mandarEmail(email)
                             } else {
@@ -124,17 +126,15 @@ class ProductosMercado : AppCompatActivity() {
      * Abre la página web del supermercado.
      */
     private fun abrirPagina(pagWeb: String) {
-        if (pagWeb.isEmpty() || pagWeb.isBlank()) {
-            Toast.makeText(this, "El supermercado no tiene ninguna página web", Toast.LENGTH_LONG).show()
-        } else {
+
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(pagWeb)))
-        }
     }
 
     /**
      * Envia un correo electrónico al supermercado.
      */
     private fun mandarEmail(email: String) {
+        Log.d("FirestoreData", "el correo ha entrado en la funcion $email")
         if (email.isEmpty() || email.isBlank()) {
             Toast.makeText(this, "El supermercado no tiene una dirección de correo electrónico", Toast.LENGTH_LONG).show()
         } else {

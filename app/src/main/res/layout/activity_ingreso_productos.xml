@@ -80,9 +80,11 @@
 
     <ScrollView
         android:id="@+id/SV1"
-        android:layout_width="391dp"
-        android:layout_height="264dp"
+        android:layout_width="376dp"
+        android:layout_height="266dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">

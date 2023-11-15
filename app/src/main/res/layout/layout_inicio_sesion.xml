@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <include
         android:id="@+id/appbar"
         layout="@layout/toolbar"
@@ -18,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginEnd="101dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:ems="10"
         android:hint="@string/txtCont"
         android:inputType="textPassword"
@@ -34,9 +35,8 @@
         android:layout_width="262dp"
         android:layout_height="112dp"
         android:layout_marginStart="118dp"
-        android:layout_marginTop="100dp"
         android:layout_marginEnd="118dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="@string/intNombEmp"
         android:textAlignment="center"
@@ -45,9 +45,7 @@
         app:layout_constraintBottom_toTopOf="@+id/ETISN"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/appbar"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/ETISN"
@@ -55,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginEnd="101dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
         android:ems="10"
         android:hint="@string/txtNomb"
         android:inputType="text"
@@ -72,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginEnd="101dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:ems="10"
         android:hint="@string/direcci_n"
         android:inputType="text"
@@ -87,7 +85,7 @@
         android:id="@+id/btnIniSec"
         android:layout_width="106dp"
         android:layout_height="61dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="50dp"
         android:backgroundTint="#3A3A3A"
         android:text="@string/btIniSesi"
         app:layout_constraintBottom_toTopOf="@+id/BTNABREREG"
@@ -101,7 +99,6 @@
         android:layout_height="59dp"
         android:layout_marginStart="125dp"
         android:layout_marginEnd="126dp"
-        android:layout_marginBottom="148dp"
         android:backgroundTint="#1C1D51"
         android:onClick="abrirRegistrar"
         android:text="@string/btnRegEmp"
