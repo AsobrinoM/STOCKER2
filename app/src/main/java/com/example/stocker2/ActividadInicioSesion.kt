@@ -145,10 +145,13 @@ class ActividadInicioSesion : AppCompatActivity() {
                     val documento = querySnapshot.documents[0]
                     val idAbuscar = documento["id"].toString()
                     val editor = sharedPreferences.edit()
-                    editor.putString("nombrealmacenado", nombreEmpresa)
-                    editor.putString("contrasenaalmacenada", contrasena)
-                    editor.putString("direccionalmacenada", direccion)
-                    editor.apply()
+                    if(bolguardo){
+                        editor.putString("nombrealmacenado", nombreEmpresa)
+                        editor.putString("contrasenaalmacenada", contrasena)
+                        editor.putString("direccionalmacenada", direccion)
+                        editor.apply()
+                    }
+
 
                     val valorpreferences = sharedPreferences.getString("nombrealmacenado", "")
                     Log.d("controlis", " se presupone que este es el nombre almacenado $valorpreferences  ")
