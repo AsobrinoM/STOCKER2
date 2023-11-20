@@ -14,7 +14,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerMercados"
-        android:layout_width="723dp"
+        android:layout_width="match_parent"
         android:layout_height="253dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
