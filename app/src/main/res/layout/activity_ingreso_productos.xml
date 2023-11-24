@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        style="@style/ButtonStyle"
         android:id="@+id/btnGuardarProducto"
         android:layout_width="189dp"
         android:layout_height="57dp"
@@ -64,8 +65,9 @@
         android:text="@string/tvregProd"
         android:textAlignment="center"
         android:textColor="#E89B9B"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="-3dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView4"

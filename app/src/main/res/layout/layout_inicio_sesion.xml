@@ -82,6 +82,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        style="@style/ButtonStyle"
         android:id="@+id/btnIniSec"
         android:layout_width="106dp"
         android:layout_height="61dp"
@@ -94,12 +95,13 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
+        style="@style/ButtonStyle"
         android:id="@+id/BTNABREREG"
         android:layout_width="160dp"
         android:layout_height="59dp"
         android:layout_marginStart="125dp"
         android:layout_marginEnd="126dp"
-        android:backgroundTint="#1C1D51"
+        android:backgroundTint="#28282E"
         android:onClick="abrirRegistrar"
         android:text="@string/btnRegEmp"
         app:layout_constraintBottom_toBottomOf="parent"

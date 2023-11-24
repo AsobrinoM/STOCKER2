@@ -114,6 +114,7 @@
         app:layout_constraintVertical_bias="0.84" />
 
     <Button
+        style="@style/ButtonStyle"
         android:id="@+id/btnRegReg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
