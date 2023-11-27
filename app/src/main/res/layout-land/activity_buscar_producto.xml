@@ -18,6 +18,7 @@
     <Button
         android:id="@+id/btFiltrar"
         android:layout_width="162dp"
+        style="@style/EstiloB"
         android:layout_height="49dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="112dp"
@@ -31,6 +32,7 @@
     <EditText
         android:id="@+id/textfiltro"
         android:layout_width="wrap_content"
+        style="@style/EstiloT"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/ProductoBuscar"
@@ -42,6 +44,7 @@
 
     <ScrollView
         android:id="@+id/SV3"
+        style="@style/SVStyle"
         android:layout_width="504dp"
         android:layout_height="323dp"
         android:layout_marginTop="40dp"
