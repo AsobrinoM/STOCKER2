@@ -31,4 +31,14 @@
             app:title="@string/guarReg"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
+    <PreferenceCategory >
+
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/Guardar"
+            app:entryValues="@array/GuardarDisplay"
+            app:key="boolmus"
+            app:title="@string/musica"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -1,6 +1,9 @@
 package com.example.stocker2
 
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.media.SoundPool
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,7 +18,11 @@ import com.example.stocker2.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var btn_atras: ImageView
-
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var imgStocker: ImageView
+    lateinit var soundPool: SoundPool
+    var sonido1:Int=0
+    var musica:Int=0
     /**
      * Se llama cuando la actividad está iniciando.
      */
@@ -23,17 +30,39 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // Inflar el diseño utilizando View Binding
         crearObjetosDelXML()
+        var audioAttributes= AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .setUsage(AudioAttributes.USAGE_MEDIA)
+            .build()
 
+        soundPool = SoundPool.Builder()
+            .setMaxStreams(5)
+            .setAudioAttributes(audioAttributes)
+            .build()
+        sonido1=soundPool.load(this, R.raw.sonido1,1)
+        mediaPlayer = MediaPlayer.create(this, R.raw.cancionfondo)
+        mediaPlayer.isLooping = true
         // Configurar la ActionBar
         setSupportActionBar(binding.appbar.toolb)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         // Encontrar y configurar el botón de retroceso
         btn_atras = findViewById(R.id.btn_atras)
+        imgStocker=findViewById(R.id.STOCKER)
+        mediaPlayer = MediaPlayer.create(this, R.raw.cancionfondo)
+        mediaPlayer.isLooping = true
+        mediaPlayer.start()
+
         btn_atras.setOnClickListener {
             finish()
         }
+        imgStocker.setOnClickListener{
+            soundPool.play(sonido1, 9F,9F,1,0,1F);
+
+        }
+
     }
+
 
     /**
      * Infla el diseño utilizando View Binding.
@@ -42,7 +71,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release() // Liberar recursos cuando se destruye la actividad
+    }
     /**
      * Crea el menú de opciones en la ActionBar.
      */

@@ -37,7 +37,7 @@
         android:onClick="abrirBuscarProducto"
         android:text="@string/botStrProd"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView2" />
+        app:layout_constraintStart_toEndOf="@+id/STOCKER" />
 
     <Button
         android:id="@+id/btnRegistroEmpresa"
@@ -72,7 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/STOCKER"
         android:layout_width="248dp"
         android:layout_height="254dp"
         android:layout_marginStart="10dp"
