@@ -61,12 +61,4 @@
         <item>no</item>
         <item>si</item>
     </string-array>
-    <string-array name="Musica">
-        <item>no</item>
-        <item>si</item>
-    </string-array>
-    <string-array name="MusicaDisplay">
-        <item>no</item>
-        <item>si</item>
-    </string-array>
 </resources>
