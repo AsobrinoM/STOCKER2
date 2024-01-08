@@ -18,22 +18,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        style="@style/ButtonStyle"
         android:id="@+id/btnGuardarProducto"
+        style="@style/ButtonStyle"
         android:layout_width="189dp"
         android:layout_height="57dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="14dp"
         android:backgroundTint="#000000"
         android:text="@string/registrar_producto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCantProd" />
 
+    <Button
+        android:id="@+id/btnFotoCosa"
+        style="@style/ButtonStyle"
+        android:layout_width="293dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="59dp"
+        android:backgroundTint="#000000"
+        android:text="@string/registra_una_foto_para_tu_supermercado"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenSuper" />
+
     <EditText
         android:id="@+id/etNombProd"
         android:layout_width="285dp"
         android:layout_height="50dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="@string/txtNomb"
         android:inputType="text"
@@ -61,19 +75,20 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="8dp"
         android:text="@string/tvregProd"
         android:textAlignment="center"
         android:textColor="#E89B9B"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnFotoCosa" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:text="@string/tus_productos"
         android:textColor="#E89B9B"
         app:layout_constraintEnd_toEndOf="parent"
@@ -82,12 +97,13 @@
 
     <ScrollView
         android:id="@+id/SV1"
-        android:layout_width="376dp"
-        android:layout_height="266dp"
+        android:layout_width="385dp"
+        android:layout_height="126dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">
 
@@ -97,5 +113,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/imagenSuper"
+        android:layout_width="151dp"
+        android:layout_height="156dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="130dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

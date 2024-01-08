@@ -1,10 +1,16 @@
 package com.example.stocker2
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.media.MediaScannerConnection
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -12,14 +18,21 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import com.example.stocker2.databinding.ActivityIngresoProductosBinding
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import java.util.Objects
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+
 
 /**
  * [ActivityIngresoProductos] es una actividad que permite a los usuarios ingresar y eliminar productos y
@@ -28,10 +41,13 @@ import kotlinx.coroutines.launch
 class ActivityIngresoProductos : AppCompatActivity() {
 
     private lateinit var binding: ActivityIngresoProductosBinding
+    val PETICION_PERMISO_CAMARA=321
+    private var fotoPath=""
     private lateinit var btn_atras: ImageView
     private val db = FirebaseFirestore.getInstance()
     private val myCollection = db.collection("Productos")
-
+    private val CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 = 5
+    lateinit var activityResultLauncherRedimensionarImagen2: ActivityResultLauncher<Intent>
     /**
      * Método llamado cuando se crea la actividad.
      */
@@ -39,13 +55,26 @@ class ActivityIngresoProductos : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // Inicialización de los elementos del diseño XML
         crearObjetosDelXml()
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
+                PETICION_PERMISO_CAMARA
+            )
+        }
         setSupportActionBar(binding.appbar.toolb)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         // Obtiene el ID del supermercado desde el intent
         val objIntent: Intent = intent
         var id = objIntent.getStringExtra("id")
-
         // Configuración del botón para guardar productos
         binding.btnGuardarProducto.setOnClickListener {
             if (id != null) {
@@ -69,6 +98,45 @@ class ActivityIngresoProductos : AppCompatActivity() {
         btn_atras.setOnClickListener {
             finish()
         }
+        binding.btnFotoCosa.setOnClickListener {
+            Log.d("cam", "Botón btnFotoCosa presionado")
+            if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+                dispatchTakePictureIntent(true,CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2)
+            }
+        }
+        activityResultLauncherRedimensionarImagen2=
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+                    result->
+                if(result.data!= null){
+                    val data:Intent=result.data!!
+
+                    if(result.resultCode== RESULT_OK){
+                        setPicRedim2()
+                        refreshGallery()
+                    }
+                }
+            }
+    }
+    private fun setPicRedim2(){
+        val targetW: Int=binding.imagenSuper.width
+        val targetH: Int = binding.imagenSuper.height
+
+        val bmOptions= BitmapFactory.Options()
+        bmOptions.inJustDecodeBounds=true
+        BitmapFactory.decodeFile(fotoPath,bmOptions)
+
+        val photoW=bmOptions.outWidth
+        val photoh= bmOptions.outHeight
+
+        val scaleFactor=Math.min(photoW/targetW,photoh/targetH)
+        bmOptions.inJustDecodeBounds=false
+        bmOptions.inSampleSize=scaleFactor
+        val bitmap= BitmapFactory.decodeFile(fotoPath,bmOptions)
+        binding.imagenSuper.setImageBitmap(bitmap)
+    }
+    private fun refreshGallery(){
+        val f = File(fotoPath)
+        MediaScannerConnection.scanFile(this, arrayOf(f.toString()),null,null)
     }
 
     /**
@@ -78,10 +146,61 @@ class ActivityIngresoProductos : AppCompatActivity() {
         binding = ActivityIngresoProductosBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+    private fun dispatchTakePictureIntent(galeria: Boolean, code: Int) {
+        Log.d("cam", "metidoEnEl dispatch")
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        // Verifica si hay una aplicación de cámara disponible para manejar el intent
+        takePictureIntent.resolveActivity(packageManager)?.let {
+            // Crea el archivo donde se guardará la foto
+            val photoFile = createImageFile(galeria) ?: return
+
+            fotoPath = photoFile.absolutePath
+
+            // Obtiene el URI para el archivo
+            val photoURI: Uri = FileProvider.getUriForFile(
+                this,
+                "com.example.stocker2.fileprovider", // Asegúrate de que esto coincida con tu archivo manifest
+                photoFile
+            )
+
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+            when (code) {
+                CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 -> activityResultLauncherRedimensionarImagen2.launch(takePictureIntent)
+            }
+        }
+    }
 
     /**
      * Método llamado para crear el menú de opciones en la barra de acción.
      */
+    private fun createImageFile(galeria: Boolean): File?{
+        Log.d("cam","Metido en el createFile")
+        var image: File? = null
+        val timeStamp= SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName= "IMG_" + timeStamp+ "_"
+
+        var storageDir: File? = null
+
+        storageDir =
+            if(galeria) {
+                File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString()+"/Camera/"
+                )
+            }
+            else{
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            }
+        if(!storageDir!!.exists()){
+            storageDir.mkdirs()
+        }
+        image= File.createTempFile(
+            imageFileName,
+            ".jpeg",
+            storageDir
+        )
+        return image
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main_act1, menu)
         return true

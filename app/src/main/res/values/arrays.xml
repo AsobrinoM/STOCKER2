@@ -53,6 +53,14 @@
      <item>no</item>
         <item>si</item>
     </string-array>
+    <string-array name="Guardmus">
+        <item>no</item>
+        <item>si</item>
+    </string-array>
+    <string-array name="GuardmusDisplay">
+        <item>no</item>
+        <item>si</item>
+    </string-array>
     <string-array name="Musica">
         <item>no</item>
         <item>si</item>

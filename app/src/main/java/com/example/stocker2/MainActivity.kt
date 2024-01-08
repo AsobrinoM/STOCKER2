@@ -1,6 +1,8 @@
 package com.example.stocker2
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.media.SoundPool
@@ -16,32 +18,27 @@ import com.example.stocker2.databinding.ActivityMainBinding
  * Actividad principal de la aplicación Stocker2.
  */
 class MainActivity : AppCompatActivity() {
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var binding: ActivityMainBinding
     private lateinit var btn_atras: ImageView
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var imgStocker: ImageView
     lateinit var soundPool: SoundPool
+    private var bolmusica = false
     var sonido1:Int=0
     var musica:Int=0
     /**
      * Se llama cuando la actividad está iniciando.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         // Inflar el diseño utilizando View Binding
         crearObjetosDelXML()
-        var audioAttributes= AudioAttributes.Builder()
-            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-            .setUsage(AudioAttributes.USAGE_MEDIA)
-            .build()
+        sharedPreferences = getSharedPreferences(packageName + "_preferences", Context.MODE_PRIVATE)
+        val siono = sharedPreferences.getString("boolmus", "no")
 
-        soundPool = SoundPool.Builder()
-            .setMaxStreams(5)
-            .setAudioAttributes(audioAttributes)
-            .build()
-        sonido1=soundPool.load(this, R.raw.sonido1,1)
-        mediaPlayer = MediaPlayer.create(this, R.raw.cancionfondo)
-        mediaPlayer.isLooping = true
+
         // Configurar la ActionBar
         setSupportActionBar(binding.appbar.toolb)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -56,10 +53,26 @@ class MainActivity : AppCompatActivity() {
         btn_atras.setOnClickListener {
             finish()
         }
-        imgStocker.setOnClickListener{
-            soundPool.play(sonido1, 9F,9F,1,0,1F);
 
+        if(siono=="si"){
+            var audioAttributes= AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .build()
+
+            soundPool = SoundPool.Builder()
+                .setMaxStreams(5)
+                .setAudioAttributes(audioAttributes)
+                .build()
+            sonido1=soundPool.load(this, R.raw.sonido1,1)
+            mediaPlayer = MediaPlayer.create(this, R.raw.cancionfondo)
+            mediaPlayer.isLooping = true
+            imgStocker.setOnClickListener{
+                soundPool.play(sonido1, 9F,9F,1,0,1F);
+
+            }
         }
+
 
     }
 
