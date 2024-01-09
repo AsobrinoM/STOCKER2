@@ -46,15 +46,14 @@ class MainActivity : AppCompatActivity() {
         // Encontrar y configurar el botón de retroceso
         btn_atras = findViewById(R.id.btn_atras)
         imgStocker=findViewById(R.id.STOCKER)
-        mediaPlayer = MediaPlayer.create(this, R.raw.cancionfondo)
-        mediaPlayer.isLooping = true
-        mediaPlayer.start()
+       // mediaPlayer = MediaPlayer.create(this, R.raw.cancionfondo)
+       // mediaPlayer.isLooping = true
+       // mediaPlayer.start()
 
         btn_atras.setOnClickListener {
             finish()
         }
 
-        if(siono=="si"){
             var audioAttributes= AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .setUsage(AudioAttributes.USAGE_MEDIA)
@@ -65,13 +64,15 @@ class MainActivity : AppCompatActivity() {
                 .setAudioAttributes(audioAttributes)
                 .build()
             sonido1=soundPool.load(this, R.raw.sonido1,1)
-            mediaPlayer = MediaPlayer.create(this, R.raw.cancionfondo)
-            mediaPlayer.isLooping = true
-            imgStocker.setOnClickListener{
-                soundPool.play(sonido1, 9F,9F,1,0,1F);
+          //  mediaPlayer = MediaPlayer.create(this, R.raw.cancionfondo)
+           // mediaPlayer.isLooping = true
 
-            }
+
+
+        imgStocker.setOnClickListener {
+        soundPool.play(sonido1, 9F,9F,1,0,1F);
         }
+
 
 
     }
