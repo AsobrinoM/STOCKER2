@@ -2,6 +2,8 @@ package com.example.stocker2
 
 import android.content.Intent
 import android.graphics.Color
+import android.media.AudioAttributes
+import android.media.SoundPool
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -27,7 +29,8 @@ class ProductosMercado : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val productos = db.collection("Productos")
     private val supermercados = db.collection("supermercados")
-
+    lateinit var soundPool: SoundPool
+    var eslogan:Int=0
     override fun onCreate(savedInstanceState: Bundle?) {
         // Obtener datos del Intent
         val objIntent: Intent = intent
@@ -59,6 +62,8 @@ class ProductosMercado : AppCompatActivity() {
         if (id != null) {
             listarDocumento(id)
         }
+        playSlogan(NombreEmpresa!!)
+
     }
 
     /**
@@ -67,6 +72,34 @@ class ProductosMercado : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main_act1, menu)
         return true
+    }
+    private fun playSlogan(nombre: String) {
+        Log.d("tajete", "Ha entrado en Slogan , el nombre es $nombre")
+        var audioAttributes = AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .setUsage(AudioAttributes.USAGE_MEDIA)
+            .build()
+
+        soundPool = SoundPool.Builder()
+            .setMaxStreams(5)
+            .setAudioAttributes(audioAttributes)
+            .build()
+
+        val soundID = when (nombre) {
+            "Mercadona" -> R.raw.mercadona
+            "Carrefour" -> R.raw.carrefour
+            "Dia" -> R.raw.dia
+            else -> null
+        }
+
+        soundID?.let {
+            val eslogan = soundPool.load(this, it, 1)
+            soundPool.setOnLoadCompleteListener { soundPool, sampleId, status ->
+                if (status == 0 && sampleId == eslogan) {
+                    soundPool.play(eslogan, 9F, 9F, 1, 0, 1F)
+                }
+            }
+        }
     }
 
     /**

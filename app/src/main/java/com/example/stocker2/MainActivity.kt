@@ -24,9 +24,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mediaPlayer: MediaPlayer
     private lateinit var imgStocker: ImageView
     lateinit var soundPool: SoundPool
-    private var bolmusica = false
+    //private var bolmusica = false
     var sonido1:Int=0
-    var musica:Int=0
+    //var musica:Int=0
     /**
      * Se llama cuando la actividad está iniciando.
      */
@@ -54,26 +54,30 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-            var audioAttributes= AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .build()
-
-            soundPool = SoundPool.Builder()
-                .setMaxStreams(5)
-                .setAudioAttributes(audioAttributes)
-                .build()
-            sonido1=soundPool.load(this, R.raw.sonido1,1)
+musicosa()
           //  mediaPlayer = MediaPlayer.create(this, R.raw.cancionfondo)
            // mediaPlayer.isLooping = true
 
 
 
+
+
+
+    }
+    private fun musicosa(){
+        var audioAttributes= AudioAttributes.Builder()
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .setUsage(AudioAttributes.USAGE_MEDIA)
+            .build()
+
+        soundPool = SoundPool.Builder()
+            .setMaxStreams(5)
+            .setAudioAttributes(audioAttributes)
+            .build()
+        sonido1=soundPool.load(this, R.raw.sonido1,1)
         imgStocker.setOnClickListener {
-        soundPool.play(sonido1, 9F,9F,1,0,1F);
+            soundPool.play(sonido1, 9F,9F,1,0,1F);
         }
-
-
 
     }
 
