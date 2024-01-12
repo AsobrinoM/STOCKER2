@@ -3,8 +3,10 @@ package com.example.stocker2
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.media.MediaScannerConnection
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +31,7 @@ import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -46,7 +49,8 @@ class ActivityIngresoProductos : AppCompatActivity() {
     private var fotoPath=""
     private lateinit var btn_atras: ImageView
     private val db = FirebaseFirestore.getInstance()
-    private val myCollection = db.collection("Productos")
+    private val myCollectionp = db.collection("Productos")
+    private val myCollections = db.collection("supermercados")
     private val CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 = 5
     lateinit var activityResultLauncherRedimensionarImagen2: ActivityResultLauncher<Intent>
     /**
@@ -75,22 +79,18 @@ class ActivityIngresoProductos : AppCompatActivity() {
 
         // Obtiene el ID del supermercado desde el intent
         val objIntent: Intent = intent
-        var id = objIntent.getStringExtra("id")
+        var id = objIntent.getStringExtra("id")!!
         // Configuración del botón para guardar productos
         binding.btnGuardarProducto.setOnClickListener {
-            if (id != null) {
-                guardarRegistro(id)
-                GlobalScope.launch {
-                    delay(1000)
-                    listarDocumento(id)
-                }
+            guardarRegistro(id)
+            GlobalScope.launch {
+                delay(1000)
+                listarDocumento(id)
             }
         }
 
         // Lista el documento al iniciar la actividad
-        if (id != null) {
-            listarDocumento(id)
-        }
+        listarDocumento(id)
 
         // Configuración del botón de retroceso
         btn_atras = findViewById(R.id.btn_atras)
@@ -110,9 +110,22 @@ class ActivityIngresoProductos : AppCompatActivity() {
                     if(result.resultCode== RESULT_OK){
                         setPicRedim2()
                         refreshGallery()
+                        subirAFirestore(id)
                     }
                 }
             }
+    }
+    private fun subirAFirestore(id:String){
+
+        binding.imagenSuper.isDrawingCacheEnabled=true
+        binding.imagenSuper.buildDrawingCache()
+        val bitmap= (binding.imagenSuper.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos)
+        val data=baos.toByteArray()
+
+
+
     }
     private fun setPicRedim2(){
         val targetW: Int=binding.imagenSuper.width
@@ -246,10 +259,10 @@ class ActivityIngresoProductos : AppCompatActivity() {
             return
         }
         var producto = binding.etNombProd.text.toString().trim()
-        myCollection.document(id).get()
+        myCollectionp.document(id).get()
             .addOnSuccessListener {
                 if (it.contains(producto)) {
-                    myCollection.document(id).set(
+                    myCollectionp.document(id).set(
                         hashMapOf(
                             producto to (binding.etCantProd.text.toString().toInt() + it.get(producto).toString().toInt())
                         ), SetOptions.merge()
@@ -261,7 +274,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
                             Log.e("Firebase Update Error", e.message, e)
                         }
                 } else {
-                    myCollection.document(id).set(
+                    myCollectionp.document(id).set(
                         hashMapOf(
                             producto to (binding.etCantProd.text.toString().toInt())
                         ), SetOptions.merge()
@@ -280,7 +293,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
      * Método que elimina un producto si su cantidad es igual o menor a 0.
      */
     private fun eliminarSieso(id: String, nombreProducto: String) {
-        myCollection.document(id).get()
+        myCollectionp.document(id).get()
             .addOnSuccessListener { documentSnapshot ->
                 val cantidadActual = documentSnapshot.getLong(nombreProducto)
 
@@ -290,7 +303,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
                         val data = HashMap<String, Any>()
                         data[nombreProducto] = FieldValue.delete()
 
-                        myCollection.document(id)
+                        myCollectionp.document(id)
                             .update(data)
                             .addOnSuccessListener {
                                 resultadoOperacion("El producto se ha eliminado debido a que su cantidad ha bajado a 0.")
@@ -309,7 +322,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
      * Método que lista los productos en un documento específico y los muestra en la interfaz de usuario.
      */
     private fun listarDocumento(nombreDocumento: String) {
-        myCollection
+        myCollectionp
             .document(nombreDocumento)
             .get()
             .addOnSuccessListener { resultado ->
