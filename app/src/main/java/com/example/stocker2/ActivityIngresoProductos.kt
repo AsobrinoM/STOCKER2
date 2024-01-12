@@ -30,6 +30,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -81,9 +82,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
                 guardarRegistro(id)
                 GlobalScope.launch {
                     delay(1000)
-                    if (id != null) {
-                        listarDocumento(id)
-                    }
+                    listarDocumento(id)
                 }
             }
         }
@@ -108,8 +107,6 @@ class ActivityIngresoProductos : AppCompatActivity() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
                     result->
                 if(result.data!= null){
-                    val data:Intent=result.data!!
-
                     if(result.resultCode== RESULT_OK){
                         setPicRedim2()
                         refreshGallery()
@@ -147,45 +144,45 @@ class ActivityIngresoProductos : AppCompatActivity() {
         setContentView(binding.root)
     }
     private fun dispatchTakePictureIntent(galeria: Boolean, code: Int) {
-        Log.d("cam", "metidoEnEl dispatch")
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-
-        // Verifica si hay una aplicación de cámara disponible para manejar el intent
-        takePictureIntent.resolveActivity(packageManager)?.let {
-            // Crea el archivo donde se guardará la foto
-            val photoFile = createImageFile(galeria) ?: return
-
-            fotoPath = photoFile.absolutePath
-
+        val Intent=Intent()
+       Intent.action = MediaStore.ACTION_IMAGE_CAPTURE
+        if (Intent.resolveActivity(packageManager)!=null){
+            val photoFile = createImageFile(galeria)
+                if(photoFile !=null){
+                fotoPath=photoFile!!.absolutePath
             // Obtiene el URI para el archivo
-            val photoURI: Uri = FileProvider.getUriForFile(
+            val photoURI = FileProvider.getUriForFile(
                 this,
-                "com.example.stocker2.fileprovider", // Asegúrate de que esto coincida con tu archivo manifest
+                "com.example.stockimg",
                 photoFile
             )
 
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+            Intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    Log.d("cam", "metidoEnEl dispatch")
             when (code) {
-                CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 -> activityResultLauncherRedimensionarImagen2.launch(takePictureIntent)
+
+                CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 -> activityResultLauncherRedimensionarImagen2.launch(Intent)
             }
-        }
+        }}
     }
+
 
     /**
      * Método llamado para crear el menú de opciones en la barra de acción.
      */
     private fun createImageFile(galeria: Boolean): File?{
-        Log.d("cam","Metido en el createFile")
+
         var image: File? = null
         val timeStamp= SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val imageFileName= "IMG_" + timeStamp+ "_"
 
         var storageDir: File? = null
-
+        Log.d("cam","Metido en el createFile")
         storageDir =
             if(galeria) {
                 File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString()+"/Camera/"
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+                        .toString()+"/Camera/"
                 )
             }
             else{
@@ -194,11 +191,15 @@ class ActivityIngresoProductos : AppCompatActivity() {
         if(!storageDir!!.exists()){
             storageDir.mkdirs()
         }
-        image= File.createTempFile(
-            imageFileName,
-            ".jpeg",
-            storageDir
-        )
+        try {
+            image = File.createTempFile(
+                imageFileName,
+                ".jpeg",
+                storageDir
+            )
+        } catch(e: IOException) {
+
+        }
         return image
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
