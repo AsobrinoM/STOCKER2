@@ -170,7 +170,8 @@ class ActividadRegistro : AppCompatActivity() {
                                 "Ciudad" to binding.ETCiuEmpr.text.toString(),
                                 "direccion" to direccion,
                                 "correo" to binding.ETTLF.text.toString(),
-                                "paginaweb" to binding.ETPWBEmp.text.toString()
+                                "paginaweb" to binding.ETPWBEmp.text.toString(),
+                                "urlImagen" to ""
                             )
 
                             // Guarda el nuevo supermercado en la colección existente

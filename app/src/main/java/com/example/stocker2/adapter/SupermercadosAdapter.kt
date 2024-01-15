@@ -60,9 +60,20 @@ class SupermercadosAdapter : RecyclerView.Adapter<SupermercadosAdapter.SuperMerc
             binding.textViewCE.text = Super.direccion
             binding.textViewCiudad.text = Super.Ciudad
             // Utiliza la biblioteca Glide para cargar una imagen desde una URL en el ImageView
-            Glide.with(binding.imageViewProducto.context)
-                .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5GuV8OQCtWOlFIAOGTqpeKXuGUwFYHin5yA&usqp=CAU")
-                .into(binding.imageViewProducto)
+            if(Super.urlImagen==""){
+                Glide.with(binding.imageViewProducto.context)
+                    .load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5GuV8OQCtWOlFIAOGTqpeKXuGUwFYHin5yA&usqp=CAU")
+                    .into(binding.imageViewProducto)
+            }
+            else{
+                Glide.with(binding.imageViewProducto.context)
+                    .load(Super.urlImagen)
+                    .into(binding.imageViewProducto)
+            }
+
+
+
+
         }
     }
 

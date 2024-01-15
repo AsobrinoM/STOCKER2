@@ -54,7 +54,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
     private val myCollectionp = db.collection("Productos")
     var storage = Firebase.storage
     val storageRef = storage.reference
- //   private val myCollections = db.collection("supermercados")
+    private val myCollections = db.collection("supermercados")
 //    private val CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 = 5
     lateinit var activityResultLauncherCargarImagenDeGaleria: ActivityResultLauncher<Intent>
     //lateinit var activityResultLauncherRedimensionarImagen2: ActivityResultLauncher<Intent>
@@ -109,27 +109,36 @@ class ActivityIngresoProductos : AppCompatActivity() {
             cargarImagen()
         }
         activityResultLauncherCargarImagenDeGaleria =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                    result ->
-                if (result.data != null){
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.data != null) {
                     val data: Intent = result.data!!
-                    if (result.resultCode == RESULT_OK){
-                        val file = data!!.data
+                    if (result.resultCode == RESULT_OK) {
+                        val file = data.data
                         val riversRef = storageRef.child("images/${file?.lastPathSegment}")
                         var uploadTask = riversRef.putFile(file!!)
-                        uploadTask.addOnFailureListener{
-                            Log.e("Firebase","Error al subir archivo",it)
-                        }.addOnSuccessListener{
-                                taskSnapshot ->
-                            taskSnapshot.storage.downloadUrl.addOnSuccessListener {
-                                    downloadUrl ->
-                                Toast.makeText(this,"Firebase Imagen subida con éxito. URL: $downloadUrl",Toast.LENGTH_SHORT).show()
+                        uploadTask.addOnFailureListener {
+                            Log.e("Firebase", "Error al subir archivo", it)
+                        }.addOnSuccessListener { taskSnapshot ->
+                            taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUrl ->
+                                Toast.makeText(this, "Firebase Imagen subida con éxito. URL: $downloadUrl", Toast.LENGTH_SHORT).show()
+
+                                // Obtener el ID del supermercado
+
+
+                                // Actualizar el campo 'urlImagen' en Firestore
+                                myCollections.document(id)
+                                    .update("urlImagen", downloadUrl.toString())
+                                    .addOnSuccessListener {
+                                        Log.d("Firestore", "urlImagen actualizada correctamente")
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.e("Firestore", "Error al actualizar urlImagen", e)
+                                    }
                             }
                         }
                     }
-
-                    }
                 }
+            }
             }
 
        //     Log.d("cam", "Botón btnFotoCosa presionado")
