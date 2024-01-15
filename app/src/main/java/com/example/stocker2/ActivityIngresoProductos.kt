@@ -25,9 +25,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import com.example.stocker2.databinding.ActivityIngresoProductosBinding
+import com.google.firebase.Firebase
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,6 +52,8 @@ class ActivityIngresoProductos : AppCompatActivity() {
     private lateinit var btn_atras: ImageView
     private val db = FirebaseFirestore.getInstance()
     private val myCollectionp = db.collection("Productos")
+    var storage = Firebase.storage
+    val storageRef = storage.reference
  //   private val myCollections = db.collection("supermercados")
 //    private val CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 = 5
     lateinit var activityResultLauncherCargarImagenDeGaleria: ActivityResultLauncher<Intent>
@@ -110,11 +114,24 @@ class ActivityIngresoProductos : AppCompatActivity() {
                 if (result.data != null){
                     val data: Intent = result.data!!
                     if (result.resultCode == RESULT_OK){
-                        val uri = data!!.data
-                        binding.imagenSuper.setImageURI(uri)
+                        val file = data!!.data
+                        val riversRef = storageRef.child("images/${file?.lastPathSegment}")
+                        var uploadTask = riversRef.putFile(file!!)
+                        uploadTask.addOnFailureListener{
+                            Log.e("Firebase","Error al subir archivo",it)
+                        }.addOnSuccessListener{
+                                taskSnapshot ->
+                            taskSnapshot.storage.downloadUrl.addOnSuccessListener {
+                                    downloadUrl ->
+                                Toast.makeText(this,"Firebase Imagen subida con éxito. URL: $downloadUrl",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+
                     }
                 }
             }
+
        //     Log.d("cam", "Botón btnFotoCosa presionado")
        //     if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)){
        //         dispatchTakePictureIntent(true,CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2)
@@ -131,7 +148,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
        //             }
        //         }
        //     }
-    }
+
     private fun subirAFirestore(id:String){
 
         binding.imagenSuper.isDrawingCacheEnabled=true
