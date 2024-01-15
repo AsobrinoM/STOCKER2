@@ -50,9 +50,10 @@ class ActivityIngresoProductos : AppCompatActivity() {
     private lateinit var btn_atras: ImageView
     private val db = FirebaseFirestore.getInstance()
     private val myCollectionp = db.collection("Productos")
-    private val myCollections = db.collection("supermercados")
-    private val CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 = 5
-    lateinit var activityResultLauncherRedimensionarImagen2: ActivityResultLauncher<Intent>
+ //   private val myCollections = db.collection("supermercados")
+//    private val CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 = 5
+    lateinit var activityResultLauncherCargarImagenDeGaleria: ActivityResultLauncher<Intent>
+    //lateinit var activityResultLauncherRedimensionarImagen2: ActivityResultLauncher<Intent>
     /**
      * Método llamado cuando se crea la actividad.
      */
@@ -88,32 +89,48 @@ class ActivityIngresoProductos : AppCompatActivity() {
                 listarDocumento(id)
             }
         }
-
         // Lista el documento al iniciar la actividad
         listarDocumento(id)
-
         // Configuración del botón de retroceso
         btn_atras = findViewById(R.id.btn_atras)
         btn_atras.setOnClickListener {
             finish()
         }
-        binding.btnFotoCosa.setOnClickListener {
-            Log.d("cam", "Botón btnFotoCosa presionado")
-            if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-                dispatchTakePictureIntent(true,CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2)
-            }
+        binding.btnFotoCosa2?.setOnClickListener {
+            val intent = Intent(this, SubirVideo::class.java)
+            startActivity(intent)
+
         }
-        activityResultLauncherRedimensionarImagen2=
+        binding.btnFotoCosa.setOnClickListener {
+            cargarImagen()
+        }
+        activityResultLauncherCargarImagenDeGaleria =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                    result->
-                if(result.data!= null){
-                    if(result.resultCode== RESULT_OK){
-                        setPicRedim2()
-                        refreshGallery()
-                        subirAFirestore(id)
+                    result ->
+                if (result.data != null){
+                    val data: Intent = result.data!!
+                    if (result.resultCode == RESULT_OK){
+                        val uri = data!!.data
+                        binding.imagenSuper.setImageURI(uri)
                     }
                 }
             }
+       //     Log.d("cam", "Botón btnFotoCosa presionado")
+       //     if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+       //         dispatchTakePictureIntent(true,CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2)
+       //     }
+       // }
+      //  activityResultLauncherRedimensionarImagen2=
+       //     registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+       //             result->
+       //         if(result.data!= null){
+       //             if(result.resultCode== RESULT_OK){
+       //                 setPicRedim2()
+       //                 refreshGallery()
+       //                 subirAFirestore(id)
+       //             }
+       //         }
+       //     }
     }
     private fun subirAFirestore(id:String){
 
@@ -156,7 +173,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
         binding = ActivityIngresoProductosBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-    private fun dispatchTakePictureIntent(galeria: Boolean, code: Int) {
+ /*   private fun dispatchTakePictureIntent(galeria: Boolean, code: Int) {
         val Intent=Intent()
        Intent.action = MediaStore.ACTION_IMAGE_CAPTURE
         if (Intent.resolveActivity(packageManager)!=null){
@@ -174,9 +191,21 @@ class ActivityIngresoProductos : AppCompatActivity() {
                     Log.d("cam", "metidoEnEl dispatch")
             when (code) {
 
-                CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 -> activityResultLauncherRedimensionarImagen2.launch(Intent)
+      //          CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 -> activityResultLauncherRedimensionarImagen2.launch(Intent)
             }
         }}
+    }
+    */
+
+    private fun cargarImagen(){
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+        if(intent.resolveActivity(packageManager)!=null){
+            activityResultLauncherCargarImagenDeGaleria.launch(intent)
+        }
     }
 
 

@@ -8,6 +8,17 @@
     android:background="#4B0000"
     tools:context=".ActivityIngresoProductos">
 
+    <Button
+        android:id="@+id/btnFotoCosa2"
+        style="@style/ButtonStyle"
+        android:layout_width="176dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#000000"
+        android:text="@string/ingresa_un_video_promocional"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imagenSuper" />
+
     <include
         android:id="@+id/appbar"
         layout="@layout/toolbar"
@@ -32,14 +43,14 @@
     <Button
         android:id="@+id/btnFotoCosa"
         style="@style/ButtonStyle"
-        android:layout_width="293dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="59dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="59dp"
+        android:layout_width="176dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="23dp"
         android:backgroundTint="#000000"
         android:text="@string/registra_una_foto_para_tu_supermercado"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnFotoCosa2"
+        app:layout_constraintHorizontal_bias="0.083"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imagenSuper" />
 
