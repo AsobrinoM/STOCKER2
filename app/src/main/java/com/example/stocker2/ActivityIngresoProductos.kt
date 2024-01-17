@@ -48,7 +48,6 @@ class ActivityIngresoProductos : AppCompatActivity() {
 
     private lateinit var binding: ActivityIngresoProductosBinding
     val PETICION_PERMISO_CAMARA=321
-    private var fotoPath=""
     private lateinit var btn_atras: ImageView
     private val db = FirebaseFirestore.getInstance()
     private val myCollectionp = db.collection("Productos")
@@ -102,6 +101,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
         }
         binding.btnFotoCosa2?.setOnClickListener {
             val intent = Intent(this, SubirVideo::class.java)
+            intent.putExtra("id", id)
             startActivity(intent)
 
         }
@@ -141,56 +141,8 @@ class ActivityIngresoProductos : AppCompatActivity() {
             }
             }
 
-       //     Log.d("cam", "Botón btnFotoCosa presionado")
-       //     if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)){
-       //         dispatchTakePictureIntent(true,CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2)
-       //     }
-       // }
-      //  activityResultLauncherRedimensionarImagen2=
-       //     registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-       //             result->
-       //         if(result.data!= null){
-       //             if(result.resultCode== RESULT_OK){
-       //                 setPicRedim2()
-       //                 refreshGallery()
-       //                 subirAFirestore(id)
-       //             }
-       //         }
-       //     }
-
-    private fun subirAFirestore(id:String){
-
-        binding.imagenSuper.isDrawingCacheEnabled=true
-        binding.imagenSuper.buildDrawingCache()
-        val bitmap= (binding.imagenSuper.drawable as BitmapDrawable).bitmap
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos)
-        val data=baos.toByteArray()
 
 
-
-    }
-    private fun setPicRedim2(){
-        val targetW: Int=binding.imagenSuper.width
-        val targetH: Int = binding.imagenSuper.height
-
-        val bmOptions= BitmapFactory.Options()
-        bmOptions.inJustDecodeBounds=true
-        BitmapFactory.decodeFile(fotoPath,bmOptions)
-
-        val photoW=bmOptions.outWidth
-        val photoh= bmOptions.outHeight
-
-        val scaleFactor=Math.min(photoW/targetW,photoh/targetH)
-        bmOptions.inJustDecodeBounds=false
-        bmOptions.inSampleSize=scaleFactor
-        val bitmap= BitmapFactory.decodeFile(fotoPath,bmOptions)
-        binding.imagenSuper.setImageBitmap(bitmap)
-    }
-    private fun refreshGallery(){
-        val f = File(fotoPath)
-        MediaScannerConnection.scanFile(this, arrayOf(f.toString()),null,null)
-    }
 
     /**
      * Método que inicializa la vinculación con los elementos de diseño XML.
@@ -199,29 +151,6 @@ class ActivityIngresoProductos : AppCompatActivity() {
         binding = ActivityIngresoProductosBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
- /*   private fun dispatchTakePictureIntent(galeria: Boolean, code: Int) {
-        val Intent=Intent()
-       Intent.action = MediaStore.ACTION_IMAGE_CAPTURE
-        if (Intent.resolveActivity(packageManager)!=null){
-            val photoFile = createImageFile(galeria)
-                if(photoFile !=null){
-                fotoPath=photoFile!!.absolutePath
-            // Obtiene el URI para el archivo
-            val photoURI = FileProvider.getUriForFile(
-                this,
-                "com.example.stockimg",
-                photoFile
-            )
-
-            Intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    Log.d("cam", "metidoEnEl dispatch")
-            when (code) {
-
-      //          CAPTURA_IMAGEN_GUARDAR_GALERIA_REDIMENSIONADA2 -> activityResultLauncherRedimensionarImagen2.launch(Intent)
-            }
-        }}
-    }
-    */
 
     private fun cargarImagen(){
         val intent = Intent()
@@ -235,41 +164,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
     }
 
 
-    /**
-     * Método llamado para crear el menú de opciones en la barra de acción.
-     */
-    private fun createImageFile(galeria: Boolean): File?{
 
-        var image: File? = null
-        val timeStamp= SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val imageFileName= "IMG_" + timeStamp+ "_"
-
-        var storageDir: File? = null
-        Log.d("cam","Metido en el createFile")
-        storageDir =
-            if(galeria) {
-                File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-                        .toString()+"/Camera/"
-                )
-            }
-            else{
-                getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            }
-        if(!storageDir!!.exists()){
-            storageDir.mkdirs()
-        }
-        try {
-            image = File.createTempFile(
-                imageFileName,
-                ".jpeg",
-                storageDir
-            )
-        } catch(e: IOException) {
-
-        }
-        return image
-    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main_act1, menu)
         return true

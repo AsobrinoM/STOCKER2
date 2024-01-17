@@ -1,40 +1,25 @@
 package com.example.stocker2
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
-import android.widget.Toast
 import android.widget.VideoView
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import com.example.stocker2.databinding.ActivitySubirVideoBinding
-import com.google.firebase.Firebase
+import com.example.stocker2.databinding.ActivityVerVideoBinding
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.storage
-import kotlin.properties.Delegates
 
-
-class SubirVideo : AppCompatActivity() {
-    private lateinit var binding:ActivitySubirVideoBinding
+class VerVideo : AppCompatActivity() {
+    private lateinit var binding:ActivityVerVideoBinding
     private lateinit var btn_atras: ImageView
     private var mVideoView: VideoView? = null
-    val PETICION_PERMISO_CAMARA=321
-    var storage = Firebase.storage
-    val storageRef = storage.reference
     private val db = FirebaseFirestore.getInstance()
     private var id: String? = null
-    private var FILEURI: Uri? =null
     private var urlVideo: String? = null
     private val myCollections = db.collection("supermercados")
+
     private var pos: Int = 0
-    lateinit var activityResultLauncherCargarVideoDeGaleria: ActivityResultLauncher<Intent>
     companion object {
         // Controla que haya una reproducción en proceso
         var isPlaying = false
@@ -45,38 +30,12 @@ class SubirVideo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         crearObjetosDelXML();
         val objIntent: Intent = intent
-         id = objIntent.getStringExtra("id")!!
-        reproducirDesdeUrlVideoDeFirestore()
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_DENIED ||
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_DENIED ||
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) == PackageManager.PERMISSION_DENIED
-        ) {
-
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ),
-                PETICION_PERMISO_CAMARA
-            )
-        }
+        id = objIntent.getStringExtra("id")!!
         if (mVideoView == null) {
             mVideoView = binding.videoView
             mVideoView!!.setOnCompletionListener { pararReproduccion() }
-            //  mVideoView!!.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.video))
+            reproducirDesdeUrlVideoDeFirestore()
         }
-
         setSupportActionBar(binding.appbar.toolb)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         btn_atras = findViewById(R.id.btn_atras)
@@ -113,41 +72,6 @@ class SubirVideo : AppCompatActivity() {
                 binding.avanButton.isEnabled = false
             }
         }
-        binding.btSubirVid.setOnClickListener {
-            seleccionarVideoDeGaleria()
-        }
-        activityResultLauncherCargarVideoDeGaleria =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.data != null) {
-                    val data: Intent = result.data!!
-                    if (result.resultCode == RESULT_OK) {
-                        val fileUri = data.data
-                        val riversRef = storageRef.child("videos/${fileUri?.lastPathSegment}")
-                        var uploadTask = riversRef.putFile(fileUri!!)
-                        uploadTask.addOnFailureListener {
-                            Log.e("Firebase", "Error al subir archivo", it)
-                        }.addOnSuccessListener { taskSnapshot ->
-                            taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUrl ->
-                                Toast.makeText(this, "Firebase Video subido con éxito. URL: $downloadUrl", Toast.LENGTH_SHORT).show()
-                                // Obtener el ID del supermercado
-                                // Actualizar el campo 'urlVideo' en Firestore
-                                myCollections.document(id!!)
-                                    .update("urlVideo", downloadUrl.toString())
-                                    .addOnSuccessListener {
-                                        Log.d("Firestore", "urlVideo actualizado correctamente")
-                                        FILEURI=fileUri
-                                        mVideoView!!.setVideoURI(fileUri)
-                                        mVideoView!!.requestFocus()
-                                        mVideoView!!.start()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        Log.e("Firestore", "Error al actualizar urlVideo", e)
-                                    }
-                            }
-                        }
-                    }
-                }
-            }
     }
     private fun reproducirDesdeUrlVideoDeFirestore() {
         id?.let {
@@ -168,18 +92,8 @@ class SubirVideo : AppCompatActivity() {
             }
         }
     }
-    private fun seleccionarVideoDeGaleria(){
-        val intent = Intent()
-        intent.type = "video/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-        if(intent.resolveActivity(packageManager)!=null){
-            activityResultLauncherCargarVideoDeGaleria.launch(intent)
-        }
-
-    }
     private fun crearObjetosDelXML(){
-        binding=ActivitySubirVideoBinding.inflate(layoutInflater)
+        binding=ActivityVerVideoBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
     private fun controlVideo() {
@@ -214,21 +128,23 @@ class SubirVideo : AppCompatActivity() {
         }
     }
     private fun cargarMultimedia() {
+
         if (mVideoView == null) {
             mVideoView = binding.videoView
             mVideoView!!.setOnCompletionListener { pararReproduccion() }
             reproducirDesdeUrlVideoDeFirestore()
+        }
+
+            mVideoView!!.start()
 
 
-        mVideoView!!.start()
-
-        binding.playButton.isEnabled = false
+            binding.playButton.isEnabled = false
         binding.stopButton.isEnabled = true
         binding.pauseButton.isEnabled = true
         binding.retrButton.isEnabled = true
         binding.avanButton.isEnabled = true
     }
-    }
+
 
     private fun retrocederReproduccion(millis: Int) {
         if (mVideoView != null) {
@@ -292,7 +208,12 @@ class SubirVideo : AppCompatActivity() {
     override fun onRestoreInstanceState(bundle: Bundle) {
         super.onRestoreInstanceState(bundle!!)
 
-        pos = bundle.getInt("posicion")
+        if (bundle != null) {
+            pos = bundle.getInt("posicion")
+
+        } else {
+
+        }
     }
 
     override fun onResume(){
@@ -311,5 +232,4 @@ class SubirVideo : AppCompatActivity() {
             controlVideo()
         }
     }
-
 }

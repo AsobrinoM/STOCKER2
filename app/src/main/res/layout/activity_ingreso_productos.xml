@@ -13,11 +13,10 @@
         style="@style/ButtonStyle"
         android:layout_width="176dp"
         android:layout_height="57dp"
-        android:layout_marginTop="4dp"
         android:backgroundTint="#000000"
         android:text="@string/ingresa_un_video_promocional"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagenSuper" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <include
         android:id="@+id/appbar"
@@ -45,14 +44,13 @@
         style="@style/ButtonStyle"
         android:layout_width="176dp"
         android:layout_height="57dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="23dp"
         android:backgroundTint="#000000"
         android:text="@string/registra_una_foto_para_tu_supermercado"
         app:layout_constraintEnd_toStartOf="@+id/btnFotoCosa2"
         app:layout_constraintHorizontal_bias="0.083"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagenSuper" />
+        app:layout_constraintTop_toBottomOf="@+id/appbar" />
 
     <EditText
         android:id="@+id/etNombProd"
@@ -108,8 +106,8 @@
 
     <ScrollView
         android:id="@+id/SV1"
-        android:layout_width="385dp"
-        android:layout_height="126dp"
+        android:layout_width="392dp"
+        android:layout_height="324dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="10dp"
@@ -124,18 +122,5 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
-
-    <ImageView
-        android:id="@+id/imagenSuper"
-        android:layout_width="151dp"
-        android:layout_height="156dp"
-        android:layout_marginStart="130dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="130dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appbar"
-        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

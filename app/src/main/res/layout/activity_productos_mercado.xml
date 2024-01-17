@@ -14,10 +14,9 @@
 
     <ScrollView
         android:id="@+id/SV1"
-        android:layout_width="331dp"
-        android:layout_height="420dp"
+        android:layout_width="317dp"
+        android:layout_height="335dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="13dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +52,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
-        android:layout_marginTop="31dp"
         android:layout_marginEnd="75dp"
         android:fontFamily="sans-serif-condensed"
         android:text="@string/estos_son_nuestros_productos_disponibles"
@@ -65,4 +63,14 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNombMerc" />
+
+    <Button
+        android:id="@+id/btnEntVid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ver_video_promocional"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SV1" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

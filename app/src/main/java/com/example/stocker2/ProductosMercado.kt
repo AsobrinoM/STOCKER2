@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stocker2.databinding.ActivityProductosMercadoBinding
+import com.example.stocker2.databinding.ActivityVerVideoBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -63,7 +64,11 @@ class ProductosMercado : AppCompatActivity() {
             listarDocumento(id)
         }
         playSlogan(NombreEmpresa!!)
-
+        binding.btnEntVid?.setOnClickListener {
+            if (id != null) {
+                comprobarUrlVideoYIniciarActividad(id)
+            }
+        }
     }
 
     /**
@@ -72,6 +77,20 @@ class ProductosMercado : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main_act1, menu)
         return true
+    }
+    private fun comprobarUrlVideoYIniciarActividad(id: String) {
+        supermercados.document(id).get().addOnSuccessListener { documento ->
+            if (documento.exists() && documento.contains("urlVideo")) {
+                val intent = Intent(this, VerVideo::class.java)
+                intent.putExtra("id", id)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Lo siento, este supermercado no tiene video promocional", Toast.LENGTH_LONG).show()
+            }
+        }.addOnFailureListener {
+            Log.e("Firestore", "Error al obtener datos", it)
+            Toast.makeText(this, "Error al acceder a la información del supermercado", Toast.LENGTH_LONG).show()
+        }
     }
     private fun playSlogan(nombre: String) {
         Log.d("tajete", "Ha entrado en Slogan , el nombre es $nombre")

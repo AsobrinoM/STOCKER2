@@ -53,5 +53,7 @@
     <string name="musica">¿Activar Musica?</string>
     <string name="registra_una_foto_para_tu_supermercado">Registra una foto para tu supermercado!</string>
     <string name="ingresa_un_video_promocional">Ingresa Un video Promocional!</string>
+    <string name="subir_video">Subir Video</string>
+    <string name="ver_video_promocional">Ver Video Promocional</string>
 
 </resources>
