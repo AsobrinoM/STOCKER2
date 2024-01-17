@@ -206,14 +206,9 @@ class VerVideo : AppCompatActivity() {
     }
 
     override fun onRestoreInstanceState(bundle: Bundle) {
-        super.onRestoreInstanceState(bundle!!)
+        super.onRestoreInstanceState(bundle)
 
-        if (bundle != null) {
-            pos = bundle.getInt("posicion")
-
-        } else {
-
-        }
+        pos = bundle.getInt("posicion")
     }
 
     override fun onResume(){
