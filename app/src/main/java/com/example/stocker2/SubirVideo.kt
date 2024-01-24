@@ -20,33 +20,39 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.storage
 import kotlin.properties.Delegates
 
-
 class SubirVideo : AppCompatActivity() {
-    private lateinit var binding:ActivitySubirVideoBinding
+
+    private lateinit var binding: ActivitySubirVideoBinding
     private lateinit var btn_atras: ImageView
     private var mVideoView: VideoView? = null
-    val PETICION_PERMISO_CAMARA=321
+
+    val PETICION_PERMISO_CAMARA = 321
     var storage = Firebase.storage
     val storageRef = storage.reference
     private val db = FirebaseFirestore.getInstance()
     private var id: String? = null
-    private var FILEURI: Uri? =null
+    private var FILEURI: Uri? = null
     private var urlVideo: String? = null
     private val myCollections = db.collection("supermercados")
     private var pos: Int = 0
+
     lateinit var activityResultLauncherCargarVideoDeGaleria: ActivityResultLauncher<Intent>
+
     companion object {
         // Controla que haya una reproducción en proceso
         var isPlaying = false
         // Controla el estado de pausa
         var isPaused = false
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        crearObjetosDelXML();
+        crearObjetosDelXML()
         val objIntent: Intent = intent
-         id = objIntent.getStringExtra("id")!!
+        id = objIntent.getStringExtra("id")!!
         reproducirDesdeUrlVideoDeFirestore()
+
+        // Verificar y solicitar permisos si es necesario
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CAMERA
@@ -60,7 +66,6 @@ class SubirVideo : AppCompatActivity() {
                 Manifest.permission.READ_EXTERNAL_STORAGE
             ) == PackageManager.PERMISSION_DENIED
         ) {
-
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(
@@ -71,10 +76,10 @@ class SubirVideo : AppCompatActivity() {
                 PETICION_PERMISO_CAMARA
             )
         }
+
         if (mVideoView == null) {
             mVideoView = binding.videoView
             mVideoView!!.setOnCompletionListener { pararReproduccion() }
-            //  mVideoView!!.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.video))
         }
 
         setSupportActionBar(binding.appbar.toolb)
@@ -89,33 +94,33 @@ class SubirVideo : AppCompatActivity() {
             binding.playButton.isEnabled = true
             binding.stopButton.isEnabled = false
             binding.pauseButton.isEnabled = false
-
             binding.retrButton.isEnabled = false
             binding.avanButton.isEnabled = false
-
             controlVideo()
         } else {
             if (isPlaying) {
-
+                // Habilita o deshabilita botones según el estado de reproducción
                 binding.playButton.isEnabled = false
                 binding.stopButton.isEnabled = true
                 binding.pauseButton.isEnabled = true
-
                 binding.retrButton.isEnabled = true
                 binding.avanButton.isEnabled = true
             } else {
-
+                // Habilita o deshabilita botones según el estado de reproducción
                 binding.playButton.isEnabled = true
                 binding.stopButton.isEnabled = false
                 binding.pauseButton.isEnabled = false
-
                 binding.retrButton.isEnabled = false
                 binding.avanButton.isEnabled = false
             }
         }
+
+        // Configurar el botón para seleccionar un video de la galería
         binding.btSubirVid.setOnClickListener {
             seleccionarVideoDeGaleria()
         }
+
+        // Configurar el launcher para la selección de video
         activityResultLauncherCargarVideoDeGaleria =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.data != null) {
@@ -135,7 +140,7 @@ class SubirVideo : AppCompatActivity() {
                                     .update("urlVideo", downloadUrl.toString())
                                     .addOnSuccessListener {
                                         Log.d("Firestore", "urlVideo actualizado correctamente")
-                                        FILEURI=fileUri
+                                        FILEURI = fileUri
                                         mVideoView!!.setVideoURI(fileUri)
                                         mVideoView!!.requestFocus()
                                         mVideoView!!.start()
@@ -149,6 +154,7 @@ class SubirVideo : AppCompatActivity() {
                 }
             }
     }
+
     private fun reproducirDesdeUrlVideoDeFirestore() {
         id?.let {
             myCollections.document(it).get().addOnSuccessListener { documento ->
@@ -168,20 +174,22 @@ class SubirVideo : AppCompatActivity() {
             }
         }
     }
-    private fun seleccionarVideoDeGaleria(){
+
+    private fun seleccionarVideoDeGaleria() {
         val intent = Intent()
         intent.type = "video/*"
         intent.action = Intent.ACTION_GET_CONTENT
         intent.putExtra(MediaStore.EXTRA_OUTPUT, MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
-        if(intent.resolveActivity(packageManager)!=null){
+        if (intent.resolveActivity(packageManager) != null) {
             activityResultLauncherCargarVideoDeGaleria.launch(intent)
         }
-
     }
-    private fun crearObjetosDelXML(){
-        binding=ActivitySubirVideoBinding.inflate(layoutInflater)
+
+    private fun crearObjetosDelXML() {
+        binding = ActivitySubirVideoBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
     private fun controlVideo() {
         binding.playButton.setOnClickListener {
             isPlaying = true
@@ -213,21 +221,20 @@ class SubirVideo : AppCompatActivity() {
             avanzarReproduccion(10000)
         }
     }
+
     private fun cargarMultimedia() {
         if (mVideoView == null) {
             mVideoView = binding.videoView
             mVideoView!!.setOnCompletionListener { pararReproduccion() }
             reproducirDesdeUrlVideoDeFirestore()
-
-
+        }
         mVideoView!!.start()
-
+        // Habilita o deshabilita botones según el estado de reproducción
         binding.playButton.isEnabled = false
         binding.stopButton.isEnabled = true
         binding.pauseButton.isEnabled = true
         binding.retrButton.isEnabled = true
         binding.avanButton.isEnabled = true
-    }
     }
 
     private fun retrocederReproduccion(millis: Int) {
@@ -244,16 +251,13 @@ class SubirVideo : AppCompatActivity() {
         }
     }
 
-
-
     private fun pararReproduccion() {
         if (mVideoView != null) {
             mVideoView!!.pause()
             pos = 0
             mVideoView!!.seekTo(pos)
-
             mVideoView = null
-
+            // Habilita o deshabilita botones según el estado de reproducción
             binding.playButton.isEnabled = true
             binding.stopButton.isEnabled = false
             binding.pauseButton.isEnabled = false
@@ -264,8 +268,6 @@ class SubirVideo : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-
-
         if (mVideoView != null) {
             pos = mVideoView!!.currentPosition
             mVideoView!!.pause()
@@ -274,11 +276,8 @@ class SubirVideo : AppCompatActivity() {
 
     override fun onSaveInstanceState(bundle: Bundle) {
         super.onSaveInstanceState(bundle)
-
-
         if (mVideoView != null) {
             bundle.putInt("posicion", pos)
-
         }
     }
 
@@ -291,25 +290,17 @@ class SubirVideo : AppCompatActivity() {
 
     override fun onRestoreInstanceState(bundle: Bundle) {
         super.onRestoreInstanceState(bundle!!)
-
         pos = bundle.getInt("posicion")
     }
 
-    override fun onResume(){
+    override fun onResume() {
         super.onResume()
-
-
         if (mVideoView != null) {
-
-
             if (isPlaying && !isPaused) {
                 mVideoView!!.start()
             }
-
             mVideoView!!.seekTo(pos)
-
             controlVideo()
         }
     }
-
 }

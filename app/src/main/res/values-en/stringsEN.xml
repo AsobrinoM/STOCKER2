@@ -52,4 +52,9 @@
     <string name="carrefour">Carrefour</string>
     <string name="consum">Consum</string>
     <string name="musica">Activate music?</string>
+    <string name="registra_una_foto_para_tu_supermercado">Register a photo for your superMarket!</string>
+    <string name="ingresa_un_video_promocional">Upload an promotional Video!</string>
+    <string name="subir_video">Upload Video</string>
+    <string name="ver_video_promocional">Watch promotional video</string>
+    <string name="escuch">Listen to Promotional Song</string>
 </resources>

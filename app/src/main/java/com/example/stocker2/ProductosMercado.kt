@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 /**
  * Actividad que muestra los productos de un supermercado y permite acciones como abrir su página web o enviar un correo electrónico.
@@ -58,6 +59,11 @@ class ProductosMercado : AppCompatActivity() {
         btn_atras.setOnClickListener {
             finish()
         }
+        binding.btnEscCan.setOnClickListener {
+            if (NombreEmpresa != null) {
+                comprobarSiTieneCancionYeso(NombreEmpresa)
+            };
+        }
 
         // Listar los documentos (productos) del supermercado
         if (id != null) {
@@ -90,6 +96,17 @@ class ProductosMercado : AppCompatActivity() {
         }.addOnFailureListener {
             Log.e("Firestore", "Error al obtener datos", it)
             Toast.makeText(this, "Error al acceder a la información del supermercado", Toast.LENGTH_LONG).show()
+        }
+    }
+    private fun comprobarSiTieneCancionYeso(Nombre: String) {
+        val nombreSinNada = Nombre.lowercase(Locale.ROOT)
+        val supermercadosConCancion = listOf("mercadona", "dia", "carrefour", "lidl")
+        if (nombreSinNada in supermercadosConCancion) {
+            val intent = Intent(this, ReproductorMercado::class.java)
+            intent.putExtra("nombre", Nombre)
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Lo siento, este supermercado no tiene canción promocional", Toast.LENGTH_LONG).show()
         }
     }
     private fun playSlogan(nombre: String) {

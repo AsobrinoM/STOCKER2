@@ -11,7 +11,9 @@ import com.example.stocker2.databinding.ActivityVerVideoBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
 class VerVideo : AppCompatActivity() {
-    private lateinit var binding:ActivityVerVideoBinding
+
+    // Declaración de variables miembro
+    private lateinit var binding: ActivityVerVideoBinding
     private lateinit var btn_atras: ImageView
     private var mVideoView: VideoView? = null
     private val db = FirebaseFirestore.getInstance()
@@ -20,15 +22,17 @@ class VerVideo : AppCompatActivity() {
     private val myCollections = db.collection("supermercados")
 
     private var pos: Int = 0
+
     companion object {
         // Controla que haya una reproducción en proceso
         var isPlaying = false
         // Controla el estado de pausa
         var isPaused = false
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        crearObjetosDelXML();
+        crearObjetosDelXML()
         val objIntent: Intent = intent
         id = objIntent.getStringExtra("id")!!
         if (mVideoView == null) {
@@ -48,31 +52,28 @@ class VerVideo : AppCompatActivity() {
             binding.playButton.isEnabled = true
             binding.stopButton.isEnabled = false
             binding.pauseButton.isEnabled = false
-
             binding.retrButton.isEnabled = false
             binding.avanButton.isEnabled = false
-
             controlVideo()
         } else {
             if (isPlaying) {
-
+                // Habilita o deshabilita botones según el estado de reproducción
                 binding.playButton.isEnabled = false
                 binding.stopButton.isEnabled = true
                 binding.pauseButton.isEnabled = true
-
                 binding.retrButton.isEnabled = true
                 binding.avanButton.isEnabled = true
             } else {
-
+                // Habilita o deshabilita botones según el estado de reproducción
                 binding.playButton.isEnabled = true
                 binding.stopButton.isEnabled = false
                 binding.pauseButton.isEnabled = false
-
                 binding.retrButton.isEnabled = false
                 binding.avanButton.isEnabled = false
             }
         }
     }
+
     private fun reproducirDesdeUrlVideoDeFirestore() {
         id?.let {
             myCollections.document(it).get().addOnSuccessListener { documento ->
@@ -92,10 +93,12 @@ class VerVideo : AppCompatActivity() {
             }
         }
     }
-    private fun crearObjetosDelXML(){
-        binding=ActivityVerVideoBinding.inflate(layoutInflater)
+
+    private fun crearObjetosDelXML() {
+        binding = ActivityVerVideoBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
     private fun controlVideo() {
         binding.playButton.setOnClickListener {
             isPlaying = true
@@ -127,24 +130,21 @@ class VerVideo : AppCompatActivity() {
             avanzarReproduccion(10000)
         }
     }
-    private fun cargarMultimedia() {
 
+    private fun cargarMultimedia() {
         if (mVideoView == null) {
             mVideoView = binding.videoView
             mVideoView!!.setOnCompletionListener { pararReproduccion() }
             reproducirDesdeUrlVideoDeFirestore()
         }
-
-            mVideoView!!.start()
-
-
-            binding.playButton.isEnabled = false
+        mVideoView!!.start()
+        // Habilita o deshabilita botones según el estado de reproducción
+        binding.playButton.isEnabled = false
         binding.stopButton.isEnabled = true
         binding.pauseButton.isEnabled = true
         binding.retrButton.isEnabled = true
         binding.avanButton.isEnabled = true
     }
-
 
     private fun retrocederReproduccion(millis: Int) {
         if (mVideoView != null) {
@@ -160,16 +160,13 @@ class VerVideo : AppCompatActivity() {
         }
     }
 
-
-
     private fun pararReproduccion() {
         if (mVideoView != null) {
             mVideoView!!.pause()
             pos = 0
             mVideoView!!.seekTo(pos)
-
             mVideoView = null
-
+            // Habilita o deshabilita botones según el estado de reproducción
             binding.playButton.isEnabled = true
             binding.stopButton.isEnabled = false
             binding.pauseButton.isEnabled = false
@@ -180,8 +177,6 @@ class VerVideo : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-
-
         if (mVideoView != null) {
             pos = mVideoView!!.currentPosition
             mVideoView!!.pause()
@@ -190,11 +185,8 @@ class VerVideo : AppCompatActivity() {
 
     override fun onSaveInstanceState(bundle: Bundle) {
         super.onSaveInstanceState(bundle)
-
-
         if (mVideoView != null) {
             bundle.putInt("posicion", pos)
-
         }
     }
 
@@ -207,23 +199,16 @@ class VerVideo : AppCompatActivity() {
 
     override fun onRestoreInstanceState(bundle: Bundle) {
         super.onRestoreInstanceState(bundle)
-
         pos = bundle.getInt("posicion")
     }
 
-    override fun onResume(){
+    override fun onResume() {
         super.onResume()
-
-
         if (mVideoView != null) {
-
-
             if (isPlaying && !isPaused) {
                 mVideoView!!.start()
             }
-
             mVideoView!!.seekTo(pos)
-
             controlVideo()
         }
     }

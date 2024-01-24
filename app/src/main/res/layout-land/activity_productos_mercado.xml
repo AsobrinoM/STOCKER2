@@ -16,9 +16,8 @@
         android:id="@+id/btnEntVid2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="100dp"
         android:text="@string/ver_video_promocional"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SV1" />
 
@@ -44,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
         android:fontFamily="casual"
-        android:text="AQUIVIENEELNOMBRE"
+
         android:textAlignment="textStart"
         android:textColor="#B68D8D"
         android:textColorHint="#B68D8D"
@@ -66,4 +65,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewNombMerc" />
+
+    <Button
+        android:id="@+id/btnEscCan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/escuch"
+        app:layout_constraintStart_toEndOf="@+id/btnEntVid2"
+        app:layout_constraintTop_toBottomOf="@+id/SV1" />
 </androidx.constraintlayout.widget.ConstraintLayout>
