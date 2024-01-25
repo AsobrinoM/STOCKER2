@@ -9,6 +9,17 @@
     tools:context=".ActivityIngresoProductos">
 
     <Button
+        android:id="@+id/btnMapa"
+        style="@style/ButtonStyle"
+        android:layout_width="88dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#000000"
+        android:text="@string/mapa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etNombProd"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
         android:id="@+id/btnFotoCosa2"
         style="@style/ButtonStyle"
         android:layout_width="176dp"
@@ -62,7 +73,6 @@
         android:inputType="text"
         android:textColor="#E89B9B"
         android:textColorHint="#E89B9B"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -76,7 +86,6 @@
         android:inputType="text"
         android:textColor="#E89B9B"
         android:textColorHint="#E89B9B"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etNombProd" />
 

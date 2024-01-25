@@ -8,6 +8,17 @@
     android:background="#4B0000"
     tools:context=".ActivityIngresoProductos">
 
+    <Button
+        android:id="@+id/btnMapa"
+        style="@style/ButtonStyle"
+        android:layout_width="88dp"
+        android:layout_height="70dp"
+        android:backgroundTint="#000000"
+        android:text="@string/mapa"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/SV1"
+        app:layout_constraintStart_toEndOf="@+id/btnFotoCosa" />
+
     <include
         android:id="@+id/appbar"
         layout="@layout/toolbar"
@@ -27,14 +38,6 @@
         android:text="@string/registra_una_foto_para_tu_supermercado"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imagenSuper"
-        android:layout_width="147dp"
-        android:layout_height="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnFotoCosa"
-        tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/btnGuardarProducto"
@@ -100,7 +103,7 @@
         android:layout_width="245dp"
         android:layout_height="152dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imagenSuper">
+        tools:layout_editor_absoluteX="440dp">
 
         <LinearLayout
             android:id="@+id/linearLayoutContainer"

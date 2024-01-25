@@ -108,6 +108,10 @@ class ActivityIngresoProductos : AppCompatActivity() {
         binding.btnFotoCosa.setOnClickListener {
             cargarImagen()
         }
+        binding.btnMapa.setOnClickListener {
+            val intent = Intent(this,RegistroMapas::class.java)
+            startActivity(intent)
+        }
         activityResultLauncherCargarImagenDeGaleria =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.data != null) {

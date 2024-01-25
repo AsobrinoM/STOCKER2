@@ -42,6 +42,8 @@ android {
     }
 }
 dependencies {
+    implementation("org.osmdroid:osmdroid-android:6.1.10")
+    implementation("org.osmdroid:osmdroid-geopackage:6.1.10")
     implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")

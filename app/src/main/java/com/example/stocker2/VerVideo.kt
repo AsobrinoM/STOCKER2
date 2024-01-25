@@ -30,6 +30,7 @@ class VerVideo : AppCompatActivity() {
         var isPaused = false
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXML()
