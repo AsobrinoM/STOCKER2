@@ -110,6 +110,7 @@ class ActivityIngresoProductos : AppCompatActivity() {
         }
         binding.btnMapa.setOnClickListener {
             val intent = Intent(this,RegistroMapas::class.java)
+            intent.putExtra("id",id)
             startActivity(intent)
         }
         activityResultLauncherCargarImagenDeGaleria =

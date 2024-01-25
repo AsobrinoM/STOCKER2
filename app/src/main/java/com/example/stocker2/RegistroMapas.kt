@@ -2,16 +2,24 @@ package com.example.stocker2
 
 import android.Manifest
 import android.R
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Message
+import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.stocker2.databinding.ActivityProductosMercadoBinding
 import com.example.stocker2.databinding.ActivityRegistroMapasBinding
+import com.google.firebase.firestore.FirebaseFirestore
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -22,6 +30,7 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.OverlayItem
+import org.osmdroid.views.overlay.Polyline
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
@@ -36,10 +45,26 @@ class RegistroMapas : AppCompatActivity() {
     private lateinit var mLocationOverlay: MyLocationNewOverlay
     lateinit var posicion_new: GeoPoint
     private lateinit var marker: Marker
+    private var id: String? = null
+    private var marcadorActual: Marker? = null
+
+    private var nombre:String? =null
+    private val db = FirebaseFirestore.getInstance()
+    private val myCollections = db.collection("supermercados")
+    private var ultimaUbicacionMarcador: GeoPoint? = null
+
+
     private lateinit var binding:ActivityRegistroMapasBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crearObjetosDelXml()
+        val objIntent: Intent = intent
+        id = objIntent.getStringExtra("id")!!
+        myCollections.document(id!!).get().addOnSuccessListener { result ->
+            nombre = result.getString("nombre")
+        }
+
+
         if(ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_DENIED||
             ActivityCompat.checkSelfPermission(this,
@@ -58,20 +83,27 @@ class RegistroMapas : AppCompatActivity() {
             )
         }
       //  accionesParaBotones()
-
+        binding.buttonRegistro.isEnabled=false
         map = binding.map
 
+        binding.buttonRegistro.setOnClickListener {
+            actualizarUbicacionEnFirebase()
+            Toast.makeText(this, "Ubicación actualizada!", Toast.LENGTH_SHORT).show()
+            finish()
+        }
         generarMapa()
-    //    añadirAccionesMapa()
+        añadirAccionesMapa()
         quitarRepeticionYLimitarScroll()
          habilitarMiLocalizacion()
     }
-    private fun habilitarMiLocalizacion() {
-        mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(this), map)
-        mLocationOverlay.enableMyLocation()
-        mLocationOverlay.enableFollowLocation()
-        map.overlays.add(mLocationOverlay)
+    @SuppressLint("MissingPermission")
+    fun habilitarMiLocalizacion () {
+
+        locManager = this.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
+        val loc: Location? = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0f, locListener)
     }
+
     private fun crearObjetosDelXml(){
         binding = ActivityRegistroMapasBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -91,63 +123,75 @@ class RegistroMapas : AppCompatActivity() {
             0
         )
     }
-    private fun añadirMarcadorConAccion(posicion_new:GeoPoint,tituloP: String,contenidoP: String): ItemizedIconOverlay<OverlayItem> {
-        return ItemizedIconOverlay(
-            ArrayList<OverlayItem>().apply {
-                val marker=Marker(map)
-                marker.position=posicion_new
-                marker.title=tituloP
-                marker.snippet=contenidoP
-                marker.icon=ContextCompat.getDrawable(map.context, R.drawable.ic_menu_camera)
-                val overlayItem= OverlayItem(tituloP,contenidoP,posicion_new)
-                overlayItem.setMarker(marker.icon)
-                add(overlayItem)
 
-            },
-            object: ItemizedIconOverlay.OnItemGestureListener<OverlayItem>{
-                override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-                    var geoPoint=GeoPoint(item.point.latitude,item.point.longitude)
+    private fun añadirMarcador(posicion_new: GeoPoint, contenidoP: String) {
+        // Eliminar el marcador actual si existe
+        if (marcadorActual != null) {
+            map.overlays.remove(marcadorActual)
+        }
 
-                    return true
-                }
-                override fun onItemLongPress(index: Int, item: OverlayItem?): Boolean {
-                    return false
-                }
-            },
-            map.context
-        )
+        // Crear y añadir el nuevo marcador
+        val marker = Marker(map)
+        marker.position = posicion_new
+        ultimaUbicacionMarcador = posicion_new
+        marker.title = nombre
+        marker.snippet = contenidoP
+        marker.icon = ContextCompat.getDrawable(map.context, R.drawable.btn_star)
+        map.overlays.add(marker)
+        binding.buttonRegistro.isEnabled=true
+        // Actualizar la referencia al marcador actual
+        marcadorActual = marker
+
+        // Refrescar el mapa
+        map.invalidate()
     }
-  /*  private fun añadirAccionesMapa(){
+
+    private fun añadirAccionesMapa(){
         val mapEventsReceiver=object: MapEventsReceiver {
             override fun singleTapConfirmedHelper(loc: GeoPoint?): Boolean {
-                if(loc!=null){
-                    var contenido = loc?.latitude.toString()+" "+loc?.longitude.toString()
-                    añadirMarcadorConAccion(loc,"SuperMercado Registrado",contenido)
-                }
+
                 return true
             }
 
-            override fun longPressHelper(loc: GeoPoint?): Boolean{
-                if(loc!=null){
-                    var contenido = loc?.latitude.toString()+" "+loc?.longitude.toString()
-                    map.overlays.add(añadirMarcadorConAccion(loc,"Punto",contenido))
+            override fun longPressHelper(loc: GeoPoint?): Boolean {
+                loc?.let {
+                    val contenido = "${it.latitude} ${it.longitude}"
+                    añadirMarcador(it, "Este es tu supermercado")
                 }
                 return false
-
             }
         }
-        val mapEventsOverlay= MapEventsOverlay(mapEventsReceiver)
-        map.overlays.add(0,mapEventsOverlay)
-        map.invalidate()
+        val mapEventsOverlay = MapEventsOverlay(mapEventsReceiver)
+        map.overlays.add(0, mapEventsOverlay)
     }
-    */
+    private fun actualizarUbicacionEnFirebase() {
+        marcadorActual?.let { marcador ->
+            myCollections.document(id!!)
+                .update("latitudubi", marcador.position.latitude)
+                .addOnSuccessListener {
+                    Log.d("Firestore", "latitud actualizada correctamente")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Firestore", "Error al actualizar urlVideo", e)
+                }
+            myCollections.document(id!!)
+                .update("longitudubi", marcador.position.longitude)
+                .addOnSuccessListener {
+                    Log.d("Firestore", "longitud actualizada correctamente")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Firestore", "Error al actualizar urlVideo", e)
+                }
+
+
+    }
+    }
 
     private fun generarMapa(){
         Configuration.getInstance().load(this, getSharedPreferences(packageName+"osmdroid", Context.MODE_PRIVATE))
         map.minZoomLevel=4.0
         map.controller.setZoom(12.0)
-        // var startPoint=GeoPoint(35.6804, 139.7690) // Elimina o comenta esta línea
-        // map.controller.setCenter(startPoint) // Elimina o comenta esta línea
+
         map.zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
         map.setMultiTouchControls(true)
         var mCompassOverlay= CompassOverlay(this, InternalCompassOrientationProvider(this),map)
