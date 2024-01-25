@@ -24,6 +24,7 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.OverlayItem
 import org.osmdroid.views.overlay.compass.CompassOverlay
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 class RegistroMapas : AppCompatActivity() {
@@ -63,7 +64,13 @@ class RegistroMapas : AppCompatActivity() {
         generarMapa()
     //    añadirAccionesMapa()
         quitarRepeticionYLimitarScroll()
-        // habilitarMiLocalizacion()
+         habilitarMiLocalizacion()
+    }
+    private fun habilitarMiLocalizacion() {
+        mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(this), map)
+        mLocationOverlay.enableMyLocation()
+        mLocationOverlay.enableFollowLocation()
+        map.overlays.add(mLocationOverlay)
     }
     private fun crearObjetosDelXml(){
         binding = ActivityRegistroMapasBinding.inflate(layoutInflater)
