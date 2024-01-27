@@ -56,5 +56,8 @@
     <string name="ingresa_un_video_promocional">Upload an promotional Video!</string>
     <string name="subir_video">Upload Video</string>
     <string name="ver_video_promocional">Watch promotional video</string>
-    <string name="escuch">Listen to Promotional Song</string>
+    <string name="escuch">Listen Promotional Song</string>
+    <string name="registrar_ubicacion_de_tu_supermercado">Register the Location of your market</string>
+    <string name="mapa">MAP</string>
+    <string name="ver_en_mapa">See in map</string>
 </resources>

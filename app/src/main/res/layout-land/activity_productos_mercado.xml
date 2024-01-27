@@ -13,10 +13,18 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/btnOpenmap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ver_en_mapa"
+        app:layout_constraintStart_toEndOf="@+id/btnEscCan"
+        app:layout_constraintTop_toBottomOf="@+id/SV1" />
+
+    <Button
         android:id="@+id/btnEntVid2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="50dp"
         android:text="@string/ver_video_promocional"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SV1" />
@@ -25,8 +33,8 @@
         android:id="@+id/SV1"
         android:layout_width="609dp"
         android:layout_height="190dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDispon">
 

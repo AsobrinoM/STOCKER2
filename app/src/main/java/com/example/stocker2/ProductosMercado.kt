@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.stocker2.databinding.ActivityProductosMercadoBinding
+import com.example.stocker2.databinding.ActivityVerEnMapaBinding
 import com.example.stocker2.databinding.ActivityVerVideoBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.GlobalScope
@@ -33,11 +34,12 @@ class ProductosMercado : AppCompatActivity() {
     private val supermercados = db.collection("supermercados")
     lateinit var soundPool: SoundPool
     var eslogan:Int=0
+    private var id: String? = null
+    var NombreEmpresa: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         // Obtener datos del Intent
         val objIntent: Intent = intent
-        var NombreEmpresa: String? = null
-        var id: String? = null
+
         if (objIntent.hasExtra("NombreEmpresa")) {
             NombreEmpresa = objIntent.getStringExtra("NombreEmpresa")
         }
@@ -60,20 +62,31 @@ class ProductosMercado : AppCompatActivity() {
             finish()
         }
         binding.btnEscCan.setOnClickListener {
-            if (NombreEmpresa != null) {
-                comprobarSiTieneCancionYeso(NombreEmpresa)
-            };
+            NombreEmpresa?.let { comprobarSiTieneCancionYeso(it) };
+        }
+        binding.btnOpenmap.setOnClickListener {
+            id?.let { it1 ->
+                supermercados.document(it1).get().addOnSuccessListener { document ->
+                    if (document.exists() && document.contains("latitudubi")) {
+                        val intent = Intent(this, VerEnMapa::class.java)
+                        intent.putExtra("id", id)
+                        startActivity(intent)
+                    } else {
+                        // Si no existe el campo latitudubi, muestra un Toast
+                        Toast.makeText(this, "Este supermercado no ha registrado aún su ubicación", Toast.LENGTH_LONG).show()
+                    }
+                }.addOnFailureListener {
+                    // En caso de un error al realizar la consulta a Firebase
+                    Toast.makeText(this, "Error al verificar la información del supermercado", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         // Listar los documentos (productos) del supermercado
-        if (id != null) {
-            listarDocumento(id)
-        }
+        id?.let { listarDocumento(it) }
         playSlogan(NombreEmpresa!!)
         binding.btnEntVid?.setOnClickListener {
-            if (id != null) {
-                comprobarUrlVideoYIniciarActividad(id)
-            }
+            id?.let { comprobarUrlVideoYIniciarActividad(it) }
         }
     }
 

@@ -58,5 +58,6 @@
     <string name="escuch">Escuchar Cancion Promocional</string>
     <string name="registrar_ubicacion_de_tu_supermercado">Registrar Ubicacion de tu Supermercado</string>
     <string name="mapa">MAPA</string>
+    <string name="ver_en_mapa">Ver En Mapa</string>
 
 </resources>

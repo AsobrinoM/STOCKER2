@@ -47,13 +47,10 @@ class RegistroMapas : AppCompatActivity() {
     private lateinit var marker: Marker
     private var id: String? = null
     private var marcadorActual: Marker? = null
-
     private var nombre:String? =null
     private val db = FirebaseFirestore.getInstance()
     private val myCollections = db.collection("supermercados")
     private var ultimaUbicacionMarcador: GeoPoint? = null
-
-
     private lateinit var binding:ActivityRegistroMapasBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +60,6 @@ class RegistroMapas : AppCompatActivity() {
         myCollections.document(id!!).get().addOnSuccessListener { result ->
             nombre = result.getString("nombre")
         }
-
 
         if(ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_DENIED||
@@ -83,6 +79,7 @@ class RegistroMapas : AppCompatActivity() {
             )
         }
       //  accionesParaBotones()
+
         binding.buttonRegistro.isEnabled=false
         map = binding.map
 
@@ -97,11 +94,53 @@ class RegistroMapas : AppCompatActivity() {
          habilitarMiLocalizacion()
     }
     @SuppressLint("MissingPermission")
-    fun habilitarMiLocalizacion () {
-
+    fun habilitarLocalizacion () {
         locManager = this.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
         val loc: Location? = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+        locListener = LocationListener{
+                location -> pintarRutaLinea(location)
+        }
         locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0f, locListener)
+    }
+    private fun pintarRutaLinea(loc: Location) {
+        val geoPoints: ArrayList<GeoPoint> = ArrayList()
+        marker = Marker(map)
+
+
+        if (loc != null) {
+            if (!::posicion_new.isInitialized) {
+                posicion_new = GeoPoint(loc.latitude, loc.longitude)
+                // Como es el primer punto y no uno antiguo, simplemente ponemos el marcador en pantalla
+            } else {
+                // Cuando ya haya más de un marcador
+                posicion_new = GeoPoint(loc.latitude, loc.longitude)
+                geoPoints.add(posicion_new)
+
+            }
+            //var contenido = loc.latitude.toString() + " " + loc.longitude.toString()
+            //añadirMarcador(posicion_new, "Punto", contenido)
+            pintarLinea(geoPoints)
+            moverAPosicion(posicion_new, 15.5, 1, 29f, false)
+        }
+    }
+    private fun pintarLinea(geoPoints: ArrayList<GeoPoint>) {
+        val line = Polyline()
+        line.setPoints(geoPoints)
+
+        map.overlayManager.add(line)
+    }
+    private fun moverAPosicion(latlngP: GeoPoint, zoomP: Double, speedP: Long, orientacionP: Float, tiltP: Boolean) {
+        map.controller.animateTo(latlngP, zoomP, speedP, orientacionP, tiltP)
+    }
+    @SuppressLint("MissingPermission")
+    fun habilitarMiLocalizacion () {
+
+        mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(this), map)
+        mLocationOverlay.enableMyLocation()
+        mLocationOverlay.enableFollowLocation()
+
+        map.getOverlays().add(mLocationOverlay)
     }
 
     private fun crearObjetosDelXml(){
@@ -147,9 +186,11 @@ class RegistroMapas : AppCompatActivity() {
     }
 
     private fun añadirAccionesMapa(){
-        val mapEventsReceiver=object: MapEventsReceiver {
+        val mapEventsReceiver = object: MapEventsReceiver {
             override fun singleTapConfirmedHelper(loc: GeoPoint?): Boolean {
-
+                loc?.let {
+                    mostrarCoordenadasDialogo(it)
+                }
                 return true
             }
 
@@ -158,11 +199,19 @@ class RegistroMapas : AppCompatActivity() {
                     val contenido = "${it.latitude} ${it.longitude}"
                     añadirMarcador(it, "Este es tu supermercado")
                 }
-                return false
+                return true
             }
         }
         val mapEventsOverlay = MapEventsOverlay(mapEventsReceiver)
         map.overlays.add(0, mapEventsOverlay)
+    }
+    private fun mostrarCoordenadasDialogo(loc: GeoPoint) {
+        val mensaje = "Latitud: ${loc.latitude}, Longitud: ${loc.longitude}"
+        AlertDialog.Builder(this)
+            .setTitle("Coordenadas del Punto")
+            .setMessage(mensaje)
+            .setPositiveButton("OK", null)
+            .show()
     }
     private fun actualizarUbicacionEnFirebase() {
         marcadorActual?.let { marcador ->
