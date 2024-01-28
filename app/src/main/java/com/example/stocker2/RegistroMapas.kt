@@ -136,11 +136,21 @@ class RegistroMapas : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     fun habilitarMiLocalizacion () {
 
-        mLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(this), map)
-        mLocationOverlay.enableMyLocation()
-        mLocationOverlay.enableFollowLocation()
 
-        map.getOverlays().add(mLocationOverlay)
+        // Vale tanto para OsmDroid como para Google Maps
+        locManager = this.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
+        val loc: Location? = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+        locListener = LocationListener{
+                location -> pintarRutaLinea(location)
+        }
+
+        // Pedir actualizaciones de localización, que me avise cuando haya cambios en esas posiciones
+        // Le pido que sea cada 3000 milisegundos
+        // Si pongo 1f: es que intente mandarme las posiciones cada metro que avance
+        // Y le indico el listener que voy a utilizar para enterarme de cuando lleguen coordenadas nuevas
+        // Cada vez que haya una update de localización voy a pintar un icono y una línea uniéndolo con el icono anterior
+        locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0f, locListener)
     }
 
     private fun crearObjetosDelXml(){

@@ -119,7 +119,7 @@ class VerEnMapa : AppCompatActivity() {
             arrayListOf(overlayItem),
             object : ItemizedIconOverlay.OnItemGestureListener<OverlayItem> {
                 override fun onItemSingleTapUp(index: Int, item: OverlayItem): Boolean {
-
+                    mostrarNombreSuper()
                     return true
                 }
 
@@ -135,6 +135,17 @@ class VerEnMapa : AppCompatActivity() {
         map.overlays.add(itemizedIconOverlay)
         map.invalidate()
     }
+    private fun mostrarNombreSuper(){
+                val mensaje = "Nombre: $nombre"
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Nombre Del Supermercado:")
+                    .setMessage(mensaje)
+                    .setCancelable(true)
+                    .show()
+            }
+
+
+
     private fun mostrarDatosSuper() {
         // Comprobar si el ID está establecido
         if (id == null) {
@@ -145,14 +156,14 @@ class VerEnMapa : AppCompatActivity() {
         // Consultar Firestore para obtener los datos del supermercado
         myCollections.document(id!!).get().addOnSuccessListener { document ->
             if (document.exists()) {
-                val nombre = document.getString("nombre") ?: "Nombre no disponible"
+
                 val direccion = document.getString("direccion") ?: "Dirección no disponible"
                 val paginaWeb = document.getString("paginaweb").let {
                     if (it.isNullOrEmpty()) "No tiene página web" else it
                 }
 
                 // Crear y mostrar el diálogo
-                val mensaje = "Nombre: $nombre\nDirección: $direccion\nPágina Web: $paginaWeb"
+                val mensaje = "Dirección: $direccion\n Página Web: $paginaWeb"
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Datos del Supermercado:")
                     .setMessage(mensaje)
